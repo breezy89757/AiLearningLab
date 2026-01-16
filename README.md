@@ -2,9 +2,9 @@
 
 An interactive Blazor web application for teaching AI technology evolution — from basic LLM calls to MCP (Model Context Protocol).
 
-## 📸 Screenshots
+## 📊 AI Technology Evolution
 
-Coming soon...
+![AI Technology Evolution](docs/ai_evolution.png)
 
 ## 🎯 Features
 
