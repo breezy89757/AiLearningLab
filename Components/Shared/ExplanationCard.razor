@@ -1,0 +1,24 @@
+@* ExplanationCard Component - 說明卡片 *@
+
+<div class="explanation-card @Type">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <div class="card-icon">@Icon</div>
+    }
+    <div class="card-content">
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <h3 class="card-title">@Title</h3>
+        }
+        <div class="card-body">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Icon { get; set; } = "";
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Type { get; set; } = "info"; // info, tip, warning
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

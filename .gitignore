@@ -1,0 +1,19 @@
+# Build outputs
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# ASP.NET
+*.Development.json
+
+# Secrets
+appsettings.Production.json
+
+# Logs
+*.log
+build_errors.txt

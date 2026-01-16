@@ -1,0 +1,54 @@
+﻿@inherits LayoutComponentBase
+
+<div class="app-shell">
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo">🧪 AI Learning Lab</span>
+        </div>
+        <div class="sidebar-nav">
+            <a class="nav-item" href="#level1">
+                <span class="icon">💬</span>
+                <span>L1: 純 LLM</span>
+            </a>
+            <a class="nav-item" href="#level2">
+                <span class="icon">🎭</span>
+                <span>L2: System Prompt</span>
+            </a>
+            <a class="nav-item" href="#level3">
+                <span class="icon">📝</span>
+                <span>L3: Few-shot</span>
+            </a>
+            <a class="nav-item" href="#level4">
+                <span class="icon">🧠</span>
+                <span>L4: 對話記憶</span>
+            </a>
+            <a class="nav-item" href="#level6">
+                <span class="icon">🔧</span>
+                <span>L6: 工具呼叫</span>
+            </a>
+            <a class="nav-item" href="#level7">
+                <span class="icon">🤖</span>
+                <span>L7: Agent</span>
+            </a>
+            <a class="nav-item" href="#level8">
+                <span class="icon">🌐</span>
+                <span>L8: MCP</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <span style="font-size: 12px; color: var(--text-secondary);">教育訓練版</span>
+        </div>
+    </nav>
+
+    <main class="main-area">
+        <div class="content-area">
+            @Body
+        </div>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

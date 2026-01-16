@@ -1,0 +1,87 @@
+/* ===========================================
+   Base CSS - Reset, Font, Theme Variables
+   breez-kit Standard v2.0
+   =========================================== */
+
+/* Google Fonts - Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ===== Theme Variables ===== */
+:root {
+    /* Light Theme (Default) */
+    --bg-base: #ffffff;
+    --bg-sidebar: #f7f7f8;
+    --bg-card: #ffffff;
+    --bg-hover: #ececec;
+    --border-color: #e5e5e5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --text-muted: #9a9a9a;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --shadow: rgba(0, 0, 0, 0.06);
+
+    /* Status Colors */
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+}
+
+[data-theme="dark"] {
+    --bg-base: #0f0f1a;
+    --bg-sidebar: #1a1a2e;
+    --bg-card: #1e1e32;
+    --bg-hover: #2a2a40;
+    --border-color: #3a3a50;
+    --text-primary: #e8e8e8;
+    --text-secondary: #a0a0a0;
+    --text-muted: #707070;
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    transition: background 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}

@@ -1,0 +1,96 @@
+@* ChatBox Component - 共用聊天介面 *@
+
+<div class="chat-box @(DualPane ? "dual-pane" : "")">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <div class="chat-header">
+            <span>@Title</span>
+            @if (ShowClearButton)
+            {
+                <button class="btn btn-sm" @onclick="OnClear">清除</button>
+            }
+        </div>
+    }
+    
+    <div class="chat-messages" @ref="_messagesContainer">
+        @foreach (var msg in Messages)
+        {
+            <div class="chat-message @(msg.IsUser ? "user" : "assistant")">
+                <div class="message-avatar">@(msg.IsUser ? "👤" : "🤖")</div>
+                <div class="message-content">
+                    <div class="message-text">@((MarkupString)msg.Content)</div>
+                    @if (!string.IsNullOrEmpty(msg.Metadata))
+                    {
+                        <div class="message-metadata">@msg.Metadata</div>
+                    }
+                </div>
+            </div>
+        }
+        
+        @if (IsLoading)
+        {
+            <div class="chat-message assistant">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="message-text loading">思考中...</div>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="chat-input-area">
+        <input type="text" 
+               class="chat-input" 
+               placeholder="@Placeholder"
+               @bind="InputText"
+               @bind:event="oninput"
+               @onkeydown="HandleKeyDown"
+               disabled="@IsLoading" />
+        <button class="btn btn-primary" 
+                @onclick="SendMessage" 
+                disabled="@(IsLoading || string.IsNullOrWhiteSpace(InputText))">
+            發送
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Placeholder { get; set; } = "輸入訊息...";
+    [Parameter] public bool DualPane { get; set; } = false;
+    [Parameter] public bool ShowClearButton { get; set; } = true;
+    [Parameter] public List<ChatMessageItem> Messages { get; set; } = new();
+    [Parameter] public bool IsLoading { get; set; } = false;
+    [Parameter] public EventCallback<string> OnSend { get; set; }
+    [Parameter] public EventCallback OnClear { get; set; }
+    
+    private string InputText = "";
+    private ElementReference _messagesContainer;
+    
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(InputText) && !IsLoading)
+        {
+            await SendMessage();
+        }
+    }
+    
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(InputText)) return;
+        
+        var message = InputText;
+        InputText = "";
+        await OnSend.InvokeAsync(message);
+    }
+}
+
+@* 訊息項目類別 *@
+@code {
+    public class ChatMessageItem
+    {
+        public bool IsUser { get; set; }
+        public string Content { get; set; } = "";
+        public string? Metadata { get; set; }
+    }
+}
