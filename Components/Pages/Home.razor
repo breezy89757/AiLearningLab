@@ -3,13 +3,14 @@
 @inject LlmService LlmService
 @inject AgentService AgentService
 @inject McpService McpService
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>AI Learning Lab</PageTitle>
+<PageTitle>@L["Title"]</PageTitle>
 
 <div class="playground">
     <header class="page-header">
-        <h1>🧪 AI Learning Lab</h1>
-        <p>由上往下體驗 AI 技術的演進。每個層級解決上一層的問題！</p>
+        <h1>🧪 @L["Title"]</h1>
+        <p>@L["Subtitle"]</p>
     </header>
 
     <!-- Level 1: Pure LLM -->

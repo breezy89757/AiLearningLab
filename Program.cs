@@ -1,6 +1,7 @@
 using AiLearningLab.Components;
 using AiLearningLab.Services;
 using Azure.AI.OpenAI;
+using Microsoft.AspNetCore.Localization;
 using OpenAI;
 using OpenAI.Chat;
 using System.ClientModel;
@@ -10,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Add localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddControllers();
 
 // Configure LLM provider settings (AzureOpenAI / LiteLLM)
 var providerConfig = builder.Configuration.GetSection("LlmProvider");
@@ -62,6 +67,18 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAntiforgery();
 
+// Add localization middleware
+var supportedCultures = new[] { "en", "zh-TW" };
+app.UseRequestLocalization(options =>
+{
+    options.SetDefaultCulture("zh-TW");
+    options.AddSupportedCultures(supportedCultures);
+    options.AddSupportedUICultures(supportedCultures);
+    options.ApplyCurrentCultureToResponseHeaders = true;
+    options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+});
+
+app.MapControllers();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

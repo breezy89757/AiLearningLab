@@ -1,14 +1,16 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Nav
+@inject IStringLocalizer<SharedResource> L
 
 <div class="app-shell">
     <nav class="sidebar">
         <div class="sidebar-header">
-            <span class="logo">🧪 AI Learning Lab</span>
+            <span class="logo">🧪 @L["Title"]</span>
         </div>
         <div class="sidebar-nav">
             <a class="nav-item" href="#level1">
                 <span class="icon">💬</span>
-                <span>L1: 純 LLM</span>
+                <span>L1: Pure LLM</span>
             </a>
             <a class="nav-item" href="#level2">
                 <span class="icon">🎭</span>
@@ -20,11 +22,11 @@
             </a>
             <a class="nav-item" href="#level4">
                 <span class="icon">🧠</span>
-                <span>L4: 對話記憶</span>
+                <span>L4: Memory</span>
             </a>
             <a class="nav-item" href="#level6">
                 <span class="icon">🔧</span>
-                <span>L6: 工具呼叫</span>
+                <span>L6: Tools</span>
             </a>
             <a class="nav-item" href="#level7">
                 <span class="icon">🤖</span>
@@ -36,7 +38,11 @@
             </a>
         </div>
         <div class="sidebar-footer">
-            <span style="font-size: 12px; color: var(--text-secondary);">教育訓練版</span>
+            <div class="lang-switcher">
+                <a href="/Culture/Set?culture=zh-TW&returnUrl=/" class="@(IsCurrentCulture("zh-TW") ? "active" : "")">繁中</a>
+                <span>|</span>
+                <a href="/Culture/Set?culture=en&returnUrl=/" class="@(IsCurrentCulture("en") ? "active" : "")">EN</a>
+            </div>
         </div>
     </nav>
 
@@ -52,3 +58,8 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    private bool IsCurrentCulture(string culture) =>
+        System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith(culture, StringComparison.OrdinalIgnoreCase);
+}

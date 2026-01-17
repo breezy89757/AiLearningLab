@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>1.3</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter</value></resheader>
+
+  <!-- Page Header -->
+  <data name="Title" xml:space="preserve"><value>AI Learning Lab</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>Experience AI technology evolution from top to bottom. Each level solves the previous level's problem!</value></data>
+
+  <!-- Level 1 -->
+  <data name="L1_Title" xml:space="preserve"><value>💬 Pure LLM Chat</value></data>
+  <data name="L1_Desc" xml:space="preserve"><value>Basic: Ask AI directly, no configuration</value></data>
+  <data name="L1_Placeholder" xml:space="preserve"><value>Try: "What is the return policy?"</value></data>
+  <data name="L1_Problem" xml:space="preserve"><value>⚠️ Problem: No role setting, responses may deviate from business needs</value></data>
+  <data name="L1_Arrow" xml:space="preserve"><value>⬇️ Solved by adding System Prompt</value></data>
+
+  <!-- Level 2 -->
+  <data name="L2_Title" xml:space="preserve"><value>🎭 System Prompt</value></data>
+  <data name="L2_Desc" xml:space="preserve"><value>Give AI identity: "You are an e-commerce customer service, 7-day return, free shipping over 500"</value></data>
+  <data name="L2_Placeholder" xml:space="preserve"><value>Ask "return policy" again, compare the difference</value></data>
+  <data name="L2_Solution" xml:space="preserve"><value>✅ Solved: Consistent identity and expertise</value></data>
+  <data name="L2_Problem" xml:space="preserve"><value>⚠️ New Problem: Output format is not fixed, hard to process programmatically</value></data>
+  <data name="L2_Arrow" xml:space="preserve"><value>⬇️ Solved with Few-shot examples</value></data>
+
+  <!-- Level 3 -->
+  <data name="L3_Title" xml:space="preserve"><value>📝 Few-shot Learning</value></data>
+  <data name="L3_Desc" xml:space="preserve"><value>Teach AI fixed output format (JSON) with examples</value></data>
+  <data name="L3_Placeholder" xml:space="preserve"><value>Enter review: "terrible" "not bad" "awesome!"</value></data>
+  <data name="L3_Solution" xml:space="preserve"><value>✅ Solved: Fixed output format, can be processed programmatically</value></data>
+  <data name="L3_Problem" xml:space="preserve"><value>⚠️ New Problem: Each conversation is independent, no memory of previous context</value></data>
+  <data name="L3_Arrow" xml:space="preserve"><value>⬇️ Solved by adding conversation history</value></data>
+
+  <!-- Level 4 -->
+  <data name="L4_Title" xml:space="preserve"><value>🧠 Chat Memory</value></data>
+  <data name="L4_Desc" xml:space="preserve"><value>AI remembers previous conversations</value></data>
+  <data name="L4_Placeholder" xml:space="preserve"><value>Say "My name is John", then ask "What's my name"</value></data>
+  <data name="L4_Solution" xml:space="preserve"><value>✅ Solved: Multi-turn conversation coherence</value></data>
+  <data name="L4_Problem" xml:space="preserve"><value>⚠️ New Problem: AI only knows training data, no real-time information</value></data>
+  <data name="L4_Arrow" xml:space="preserve"><value>⬇️ Solved with Function Calling</value></data>
+
+  <!-- Level 6 -->
+  <data name="L6_Title" xml:space="preserve"><value>🔧 Function Calling</value></data>
+  <data name="L6_Desc" xml:space="preserve"><value>AI calls tools to get real-time data</value></data>
+  <data name="L6_Tools" xml:space="preserve"><value>🌤️ Weather | 🧮 Calculator | 🔍 Document Search | 📅 Book Meeting</value></data>
+  <data name="L6_Placeholder" xml:space="preserve"><value>Try: "Taipei weather" or "123*456"</value></data>
+  <data name="L6_Solution" xml:space="preserve"><value>✅ Solved: Can get real-time data and execute operations</value></data>
+  <data name="L6_Problem" xml:space="preserve"><value>⚠️ New Problem: Complex tasks require humans to break down steps</value></data>
+  <data name="L6_Arrow" xml:space="preserve"><value>⬇️ Solved with Agent autonomous planning</value></data>
+
+  <!-- Level 7 -->
+  <data name="L7_Title" xml:space="preserve"><value>🤖 Agent</value></data>
+  <data name="L7_Desc" xml:space="preserve"><value>AI plans multi-step tasks autonomously, adjusts strategy automatically</value></data>
+  <data name="L7_Placeholder" xml:space="preserve"><value>Try: "Check weather, if sunny book a meeting room"</value></data>
+  <data name="L7_Solution" xml:space="preserve"><value>✅ Solved: Autonomously handles complex multi-step tasks</value></data>
+  <data name="L7_Problem" xml:space="preserve"><value>⚠️ New Problem: Each tool needs custom integration</value></data>
+  <data name="L7_Arrow" xml:space="preserve"><value>⬇️ Solved with MCP standardization</value></data>
+
+  <!-- Level 8 -->
+  <data name="L8_Title" xml:space="preserve"><value>🌐 MCP (Model Context Protocol)</value></data>
+  <data name="L8_Desc" xml:space="preserve"><value>Standardized tool protocol — Plug and play like USB</value></data>
+  <data name="L8_Before" xml:space="preserve"><value>❌ Without MCP: Different code for each tool</value></data>
+  <data name="L8_After" xml:space="preserve"><value>✅ With MCP: Unified protocol, auto-discover tools</value></data>
+  <data name="L8_Final" xml:space="preserve"><value>🎯 Ultimate Solution: Standardization enables AI to plug-and-play any compatible service</value></data>
+
+  <!-- Common -->
+  <data name="Send" xml:space="preserve"><value>Send</value></data>
+  <data name="Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Thinking" xml:space="preserve"><value>Thinking...</value></data>
+  <data name="AgentPlanning" xml:space="preserve"><value>Agent planning...</value></data>
+  <data name="ViewCode" xml:space="preserve"><value>📄 Code</value></data>
+  <data name="Rounds" xml:space="preserve"><value>Rounds</value></data>
+  <data name="SystemPrompt" xml:space="preserve"><value>System Prompt</value></data>
+  <data name="Example" xml:space="preserve"><value>Example</value></data>
+</root>

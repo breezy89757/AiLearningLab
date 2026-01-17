@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>1.3</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter</value></resheader>
+
+  <!-- Page Header -->
+  <data name="Title" xml:space="preserve"><value>AI 學習實驗室</value></data>
+  <data name="Subtitle" xml:space="preserve"><value>由上往下體驗 AI 技術的演進。每個層級解決上一層的問題！</value></data>
+
+  <!-- Level 1 -->
+  <data name="L1_Title" xml:space="preserve"><value>💬 純 LLM 對話</value></data>
+  <data name="L1_Desc" xml:space="preserve"><value>最基礎：直接問 AI，沒有任何設定</value></data>
+  <data name="L1_Placeholder" xml:space="preserve"><value>試試：「退貨流程是什麼？」</value></data>
+  <data name="L1_Problem" xml:space="preserve"><value>⚠️ 問題：沒有角色設定，回答可能偏離業務需求</value></data>
+  <data name="L1_Arrow" xml:space="preserve"><value>⬇️ 加上 System Prompt 解決</value></data>
+
+  <!-- Level 2 -->
+  <data name="L2_Title" xml:space="preserve"><value>🎭 System Prompt</value></data>
+  <data name="L2_Desc" xml:space="preserve"><value>給 AI 身份：「你是電商客服，退貨 7 天，滿 500 免運」</value></data>
+  <data name="L2_Placeholder" xml:space="preserve"><value>同樣問「退貨流程」，比較差異</value></data>
+  <data name="L2_Solution" xml:space="preserve"><value>✅ 解決：有一致的身份和專業知識</value></data>
+  <data name="L2_Problem" xml:space="preserve"><value>⚠️ 新問題：輸出格式不固定，難以程式化處理</value></data>
+  <data name="L2_Arrow" xml:space="preserve"><value>⬇️ 用 Few-shot 範例限制格式</value></data>
+
+  <!-- Level 3 -->
+  <data name="L3_Title" xml:space="preserve"><value>📝 Few-shot Learning</value></data>
+  <data name="L3_Desc" xml:space="preserve"><value>給範例教 AI 固定輸出格式（JSON）</value></data>
+  <data name="L3_Placeholder" xml:space="preserve"><value>輸入評論：「爛透了」「還不錯」「超讚！」</value></data>
+  <data name="L3_Solution" xml:space="preserve"><value>✅ 解決：輸出格式固定，可程式化處理</value></data>
+  <data name="L3_Problem" xml:space="preserve"><value>⚠️ 新問題：每次對話都是獨立的，不記得上文</value></data>
+  <data name="L3_Arrow" xml:space="preserve"><value>⬇️ 加上對話歷史解決</value></data>
+
+  <!-- Level 4 -->
+  <data name="L4_Title" xml:space="preserve"><value>🧠 對話記憶</value></data>
+  <data name="L4_Desc" xml:space="preserve"><value>AI 記住之前說的話</value></data>
+  <data name="L4_Placeholder" xml:space="preserve"><value>先說「我叫小明」，再問「我叫什麼」</value></data>
+  <data name="L4_Solution" xml:space="preserve"><value>✅ 解決：多輪對話連貫</value></data>
+  <data name="L4_Problem" xml:space="preserve"><value>⚠️ 新問題：AI 只知道訓練資料，不知道即時資訊</value></data>
+  <data name="L4_Arrow" xml:space="preserve"><value>⬇️ Function Calling 解決</value></data>
+
+  <!-- Level 6 -->
+  <data name="L6_Title" xml:space="preserve"><value>🔧 Function Calling</value></data>
+  <data name="L6_Desc" xml:space="preserve"><value>AI 呼叫工具取得即時資料</value></data>
+  <data name="L6_Tools" xml:space="preserve"><value>🌤️ 天氣 | 🧮 計算機 | 🔍 文件搜尋 | 📅 預約會議</value></data>
+  <data name="L6_Placeholder" xml:space="preserve"><value>試試：「台北天氣」「123*456」</value></data>
+  <data name="L6_Solution" xml:space="preserve"><value>✅ 解決：可取得即時資料、執行操作</value></data>
+  <data name="L6_Problem" xml:space="preserve"><value>⚠️ 新問題：複雜任務需要人類拆解步驟</value></data>
+  <data name="L6_Arrow" xml:space="preserve"><value>⬇️ Agent 自主規劃解決</value></data>
+
+  <!-- Level 7 -->
+  <data name="L7_Title" xml:space="preserve"><value>🤖 Agent 自主代理</value></data>
+  <data name="L7_Desc" xml:space="preserve"><value>AI 自己規劃多步驟，自動調整策略</value></data>
+  <data name="L7_Placeholder" xml:space="preserve"><value>試試：「查天氣，如果晴天就預約會議室」</value></data>
+  <data name="L7_Solution" xml:space="preserve"><value>✅ 解決：自主處理複雜多步驟任務</value></data>
+  <data name="L7_Problem" xml:space="preserve"><value>⚠️ 新問題：每個工具都要自己開發整合</value></data>
+  <data name="L7_Arrow" xml:space="preserve"><value>⬇️ MCP 標準化解決</value></data>
+
+  <!-- Level 8 -->
+  <data name="L8_Title" xml:space="preserve"><value>🌐 MCP (Model Context Protocol)</value></data>
+  <data name="L8_Desc" xml:space="preserve"><value>標準化工具協議 — 像 USB 即插即用</value></data>
+  <data name="L8_Before" xml:space="preserve"><value>❌ 沒 MCP：每個工具寫不同程式碼</value></data>
+  <data name="L8_After" xml:space="preserve"><value>✅ 有 MCP：統一協議，自動發現工具</value></data>
+  <data name="L8_Final" xml:space="preserve"><value>🎯 終極解決：標準化讓 AI 能即插即用任何相容服務</value></data>
+
+  <!-- Common -->
+  <data name="Send" xml:space="preserve"><value>發送</value></data>
+  <data name="Clear" xml:space="preserve"><value>清除</value></data>
+  <data name="Thinking" xml:space="preserve"><value>思考中...</value></data>
+  <data name="AgentPlanning" xml:space="preserve"><value>Agent 規劃中...</value></data>
+  <data name="ViewCode" xml:space="preserve"><value>📄 程式碼</value></data>
+  <data name="Rounds" xml:space="preserve"><value>對話輪數</value></data>
+  <data name="SystemPrompt" xml:space="preserve"><value>System Prompt</value></data>
+  <data name="Example" xml:space="preserve"><value>範例</value></data>
+</root>

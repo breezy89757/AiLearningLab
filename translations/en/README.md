@@ -2,11 +2,11 @@
 
 An interactive Blazor web application for teaching AI technology evolution — from basic LLM calls to MCP (Model Context Protocol).
 
-[🇺🇸 English](translations/en/README.md)
+[🇹🇼 繁體中文](../../README.md)
 
 ## 📊 AI Technology Evolution
 
-![AI Technology Evolution](docs/ai_evolution.png)
+![AI Technology Evolution](../../docs/ai_evolution.png)
 
 ## 🎯 Features
 
@@ -14,6 +14,7 @@ An interactive Blazor web application for teaching AI technology evolution — f
 - **Side-by-Side Comparison** — See how each technique improves AI responses
 - **Collapsible Code Snippets** — Learn what code is needed for each level
 - **Real-time Demos** — Actually call Azure OpenAI to see results
+- **Multi-language** — Supports English and Traditional Chinese
 
 ## 🏗️ Technology Levels
 
@@ -63,25 +64,28 @@ dotnet run
 
 | Level | Input | Expected Behavior |
 |-------|-------|-------------------|
-| L1 vs L2 | "退貨流程是什麼" | L1 = generic, L2 = brand-specific |
-| L3 | "這產品很爛" | Returns JSON: `{"sentiment":"negative"}` |
-| L4 | "我叫小明" then "我叫什麼" | Remembers "小明" |
-| L6 | "台北天氣" | Calls weather tool |
-| L7 | "查天氣，晴天就預約會議室" | Multi-step reasoning |
+| L1 vs L2 | "What is the return policy?" | L1 = generic, L2 = brand-specific |
+| L3 | "This product is terrible" | Returns JSON: `{"sentiment":"negative"}` |
+| L4 | "My name is John" then "What's my name?" | Remembers "John" |
+| L6 | "Taipei weather" | Calls weather tool |
+| L7 | "Check weather, if sunny book a meeting room" | Multi-step reasoning |
 
 ## 📂 Project Structure
 
 ```
 AiLearningLab/
 ├── Components/
-│   ├── Layout/MainLayout.razor    # Sidebar with anchor links
+│   ├── Layout/MainLayout.razor    # Sidebar with language switcher
 │   └── Pages/Home.razor           # Single-page with all levels
 ├── Services/
 │   ├── LlmService.cs              # L1-L4 implementations
 │   ├── AgentService.cs            # L6-L7 implementations
 │   └── McpService.cs              # L8 MCP connection
+├── Resources/                     # Localization files
+│   ├── SharedResource.en.resx     # English
+│   └── SharedResource.zh-TW.resx  # Traditional Chinese
 ├── Plugins/
-│   └── DemoPlugin.cs              # Sample tools (weather, calc, etc.)
+│   └── DemoPlugin.cs              # Sample tools
 └── Models/
     └── LearningLevel.cs           # Level metadata
 ```
