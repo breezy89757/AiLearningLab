@@ -5,14 +5,11 @@ obj/
 # IDE
 .vs/
 .vscode/
+appsettings.json
+appsettings.Development.json
+appsettings.Development.json
 *.user
 *.suo
-
-# ASP.NET
-*.Development.json
-
-# Secrets
-appsettings.Production.json
 
 # Logs
 *.log

@@ -77,4 +77,57 @@
   <data name="Rounds" xml:space="preserve"><value>Rounds</value></data>
   <data name="SystemPrompt" xml:space="preserve"><value>System Prompt</value></data>
   <data name="Example" xml:space="preserve"><value>Example</value></data>
+  <data name="L5_Title" xml:space="preserve">
+    <value>📚 RAG (Retrieval-Augmented Generation)</value>
+  </data>
+  <data name="L5_Desc" xml:space="preserve">
+    <value>Let AI read documents to answer questions beyond training data</value>
+  </data>
+  <data name="L5_Placeholder" xml:space="preserve">
+    <value>Try: "What is the leave policy?" (AI checks the manual)</value>
+  </data>
+  <data name="L5_Solution" xml:space="preserve">
+    <value>✅ Solved: AI has access to private or up-to-date knowledge</value>
+  </data>
+  <data name="L5_Problem" xml:space="preserve">
+    <value>⚠️ New Problem: Can only retrieve info, cannot execute complex flows</value>
+  </data>
+  <data name="L5_Arrow" xml:space="preserve">
+    <value>⬇️ Function Calling solves this</value>
+  </data>
+
+  <data name="L9_Title" xml:space="preserve">
+    <value>🕸️ LangGraph (Graph-based Agent)</value>
+  </data>
+  <data name="L9_Desc" xml:space="preserve">
+    <value>Define flows with graphs, more controllable than simple Agents</value>
+  </data>
+  <data name="L9_Placeholder" xml:space="preserve">
+    <value>Try: "Write an article about AI and translate it to Spanish"</value>
+  </data>
+  <data name="L9_Solution" xml:space="preserve">
+    <value>✅ Solved: Control complex flows, support loops and state management</value>
+  </data>
+  <data name="L9_Problem" xml:space="preserve">
+    <value>⚠️ New Problem: System becomes complex, hard to debug</value>
+  </data>
+  <data name="L9_Arrow" xml:space="preserve">
+    <value>⬇️ Observability solves this</value>
+  </data>
+
+  <data name="L10_Title" xml:space="preserve">
+    <value>🔬 Observability</value>
+  </data>
+  <data name="L10_Desc" xml:space="preserve">
+    <value>Trace AI's thought process, token usage, and latency</value>
+  </data>
+  <data name="L10_Placeholder" xml:space="preserve">
+    <value>Execute any command and view detailed traces</value>
+  </data>
+  <data name="L10_Solution" xml:space="preserve">
+    <value>✅ Solved: Full visibility into AI behavior, optimizing cost/performance</value>
+  </data>
+  <data name="L10_Final" xml:space="preserve">
+    <value>🎯 Ultimate Goal: Trustworthy, Explainable, Controllable AI Systems</value>
+  </data>
 </root>

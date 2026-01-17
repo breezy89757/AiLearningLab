@@ -5,6 +5,8 @@
 @inject McpService McpService
 @inject IStringLocalizer<SharedResource> L
 
+<CultureProvider />
+
 <PageTitle>@L["Title"]</PageTitle>
 
 <div class="playground">
@@ -18,13 +20,13 @@
         <div class="level-header">
             <span class="level-badge">L1</span>
             <div class="level-title">
-                <h2>💬 純 LLM 對話</h2>
-                <p>最基礎：直接問 AI，沒有任何設定</p>
+                <h2>@L["L1_Title"]</h2>
+                <p>@L["L1_Desc"]</p>
             </div>
-            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(1)">清除</button>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(1)">@L["Clear"]</button>
         </div>
         <details class="code-section">
-            <summary>📄 程式碼</summary>
+            <summary>@L["ViewCode"]</summary>
             <pre><code>var messages = new List&lt;ChatMessage&gt;
 {
     new UserChatMessage(userMessage)
@@ -40,36 +42,36 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
                         <span class="msg-text">@msg.Content</span>
                     </div>
                 }
-                @if (_level1Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">思考中...</span></div> }
+                @if (_level1Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="試試：「退貨流程是什麼？」" 
+                <input type="text" class="form-control" placeholder="@L["L1_Placeholder"]" 
                        @bind="_level1Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 1)" disabled="@_level1Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(1)" 
-                        disabled="@(_level1Loading || string.IsNullOrWhiteSpace(_level1Input))">發送</button>
+                        disabled="@(_level1Loading || string.IsNullOrWhiteSpace(_level1Input))">@L["Send"]</button>
             </div>
         </div>
-        <div class="level-problem">⚠️ 問題：沒有角色設定，回答可能偏離業務需求</div>
+        <div class="level-problem">@L["L1_Problem"]</div>
     </section>
 
-    <div class="evolution-arrow">⬇️ 加上 System Prompt 解決</div>
+    <div class="evolution-arrow">@L["L1_Arrow"]</div>
 
     <!-- Level 2: System Prompt -->
     <section id="level2" class="level-section evolved">
         <div class="level-header">
             <span class="level-badge">L2</span>
             <div class="level-title">
-                <h2>🎭 System Prompt</h2>
-                <p>給 AI 身份：「你是電商客服，退貨 7 天，滿 500 免運」</p>
+                <h2>@L["L2_Title"]</h2>
+                <p>@L["L2_Desc"]</p>
             </div>
-            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(2)">清除</button>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(2)">@L["Clear"]</button>
         </div>
         <details class="code-section">
-            <summary>📄 程式碼</summary>
+            <summary>@L["ViewCode"]</summary>
             <pre><code>var messages = new List&lt;ChatMessage&gt;
 {
-    <span class="highlight">new SystemChatMessage(systemPrompt),</span>  // 關鍵：加入 System Prompt
+    new SystemChatMessage(systemPrompt),  // Key: Add System Prompt
     new UserChatMessage(userMessage)
 };
 var response = await chatClient.CompleteChatAsync(messages);</code></pre>
@@ -84,47 +86,47 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
                         <span class="msg-text">@msg.Content</span>
                     </div>
                 }
-                @if (_level2Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">思考中...</span></div> }
+                @if (_level2Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="同樣問「退貨流程」，比較差異" 
+                <input type="text" class="form-control" placeholder="@L["L2_Placeholder"]" 
                        @bind="_level2Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 2)" disabled="@_level2Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(2)" 
-                        disabled="@(_level2Loading || string.IsNullOrWhiteSpace(_level2Input))">發送</button>
+                        disabled="@(_level2Loading || string.IsNullOrWhiteSpace(_level2Input))">@L["Send"]</button>
             </div>
         </div>
-        <div class="level-solution">✅ 解決：有一致的身份和專業知識</div>
-        <div class="level-problem">⚠️ 新問題：輸出格式不固定，難以程式化處理</div>
+        <div class="level-solution">@L["L2_Solution"]</div>
+        <div class="level-problem">@L["L2_Problem"]</div>
     </section>
 
-    <div class="evolution-arrow">⬇️ 用 Few-shot 範例限制格式</div>
+    <div class="evolution-arrow">@L["L2_Arrow"]</div>
 
     <!-- Level 3: Few-shot -->
     <section id="level3" class="level-section evolved">
         <div class="level-header">
             <span class="level-badge">L3</span>
             <div class="level-title">
-                <h2>📝 Few-shot Learning</h2>
-                <p>給範例教 AI 固定輸出格式（JSON）</p>
+                <h2>@L["L3_Title"]</h2>
+                <p>@L["L3_Desc"]</p>
             </div>
-            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(3)">清除</button>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(3)">@L["Clear"]</button>
         </div>
         <details class="code-section">
-            <summary>📄 程式碼</summary>
+            <summary>@L["ViewCode"]</summary>
             <pre><code>var messages = new List&lt;ChatMessage&gt;
 {
-    new SystemChatMessage("你是情感分析助手，輸出 JSON"),
-    <span class="highlight">// 範例對話：教 AI 輸出格式</span>
-    <span class="highlight">new UserChatMessage("這產品超棒"),</span>
-    <span class="highlight">new AssistantChatMessage("{\"sentiment\":\"positive\",\"score\":0.95}"),</span>
-    new UserChatMessage(userMessage)  // 實際問題
+    new SystemChatMessage("Sentiment analyzer, output JSON"),
+    // Example conversation: teach AI output format
+    new UserChatMessage("This product is great"),
+    new AssistantChatMessage("{\"sentiment\":\"positive\",\"score\":0.95}"),
+    new UserChatMessage(userMessage)  // Actual question
 };
 var response = await chatClient.CompleteChatAsync(messages);</code></pre>
         </details>
         <div class="examples-box">
-            <strong>範例：</strong>
-            <code>"這產品很棒" → {{"sentiment":"positive","score":0.95}}</code>
+            <strong>@L["Example"]：</strong>
+            <code>"This is great" → {{"sentiment":"positive","score":0.95}}</code>
         </div>
         <div class="level-content">
             <div class="chat-area">
@@ -135,44 +137,44 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
                         <span class="msg-text">@((MarkupString)msg.Content)</span>
                     </div>
                 }
-                @if (_level3Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">思考中...</span></div> }
+                @if (_level3Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="輸入評論：「爛透了」「還不錯」「超讚！」" 
+                <input type="text" class="form-control" placeholder="@L["L3_Placeholder"]" 
                        @bind="_level3Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 3)" disabled="@_level3Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(3)" 
-                        disabled="@(_level3Loading || string.IsNullOrWhiteSpace(_level3Input))">發送</button>
+                        disabled="@(_level3Loading || string.IsNullOrWhiteSpace(_level3Input))">@L["Send"]</button>
             </div>
         </div>
-        <div class="level-solution">✅ 解決：輸出格式固定，可程式化處理</div>
-        <div class="level-problem">⚠️ 新問題：每次對話都是獨立的，不記得上文</div>
+        <div class="level-solution">@L["L3_Solution"]</div>
+        <div class="level-problem">@L["L3_Problem"]</div>
     </section>
 
-    <div class="evolution-arrow">⬇️ 加上對話歷史解決</div>
+    <div class="evolution-arrow">@L["L3_Arrow"]</div>
 
     <!-- Level 4: Memory -->
     <section id="level4" class="level-section evolved">
         <div class="level-header">
             <span class="level-badge">L4</span>
             <div class="level-title">
-                <h2>🧠 對話記憶</h2>
-                <p>AI 記住之前說的話（對話輪數：@(_level4History.Count / 2)）</p>
+                <h2>@L["L4_Title"]</h2>
+                <p>@L["L4_Desc"] (@L["Rounds"]: @(_level4History.Count / 2))</p>
             </div>
-            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(4)">清除</button>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(4)">@L["Clear"]</button>
         </div>
         <details class="code-section">
-            <summary>📄 程式碼</summary>
+            <summary>@L["ViewCode"]</summary>
             <pre><code>var messages = new List&lt;ChatMessage&gt;
 {
     new SystemChatMessage(systemPrompt),
-    <span class="highlight">// 把歷史對話全部加進去</span>
-    <span class="highlight">foreach (var (role, content) in history)</span>
-    <span class="highlight">{</span>
-    <span class="highlight">    messages.Add(role == "user" </span>
-    <span class="highlight">        ? new UserChatMessage(content)</span>
-    <span class="highlight">        : new AssistantChatMessage(content));</span>
-    <span class="highlight">}</span>
+    // Add all history messages
+    foreach (var (role, content) in history)
+    {
+        messages.Add(role == "user" 
+            ? new UserChatMessage(content)
+            : new AssistantChatMessage(content));
+    }
     messages.Add(new UserChatMessage(newMessage));
 };
 var response = await chatClient.CompleteChatAsync(messages);</code></pre>
@@ -186,47 +188,93 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
                         <span class="msg-text">@msg.Content</span>
                     </div>
                 }
-                @if (_level4Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">思考中...</span></div> }
+                @if (_level4Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="先說「我叫小明」，再問「我叫什麼」" 
+                <input type="text" class="form-control" placeholder="@L["L4_Placeholder"]" 
                        @bind="_level4Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 4)" disabled="@_level4Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(4)" 
-                        disabled="@(_level4Loading || string.IsNullOrWhiteSpace(_level4Input))">發送</button>
+                        disabled="@(_level4Loading || string.IsNullOrWhiteSpace(_level4Input))">@L["Send"]</button>
             </div>
         </div>
-        <div class="level-solution">✅ 解決：多輪對話連貫</div>
-        <div class="level-problem">⚠️ 新問題：AI 只知道訓練資料，不知道即時資訊</div>
+        <div class="level-solution">@L["L4_Solution"]</div>
+        <div class="level-problem">@L["L4_Problem"]</div>
     </section>
 
-    <div class="evolution-arrow">⬇️ Function Calling 解決</div>
+    <div class="evolution-arrow">@L["L4_Arrow"]</div>
+
+    <!-- Level 5: RAG -->
+    <section id="level5" class="level-section evolved">
+        <div class="level-header">
+            <span class="level-badge">L5</span>
+            <div class="level-title">
+                <h2>@L["L5_Title"]</h2>
+                <p>@L["L5_Desc"]</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(5)">@L["Clear"]</button>
+        </div>
+        <details class="code-section">
+            <summary>@L["ViewCode"]</summary>
+            <pre><code>// 1. Retrieve relevant docs from Vector DB
+var docs = await searchService.SearchAsync(userMessage);
+
+// 2. Add docs to context
+var context = string.Join("\n", docs);
+var prompt = $"Context: {context}\n\nQuestion: {userMessage}";
+
+var response = await chatClient.CompleteChatAsync(prompt);</code></pre>
+        </details>
+        <div class="level-content">
+            <div class="chat-area">
+                @foreach (var msg in _level5Messages)
+                {
+                    <div class="msg @(msg.IsUser ? "user" : "ai")">
+                        <span class="msg-role">@(msg.IsUser ? "👤" : "🤖")</span>
+                        <span class="msg-text">@((MarkupString)msg.Content)</span>
+                    </div>
+                }
+                @if (_level5Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
+            </div>
+            <div class="input-row">
+                <input type="text" class="form-control" placeholder="@L["L5_Placeholder"]" 
+                       @bind="_level5Input" @bind:event="oninput"
+                       @onkeydown="e => HandleKeyDown(e, 5)" disabled="@_level5Loading" />
+                <button class="btn btn-primary" @onclick="() => SendLevel(5)" 
+                        disabled="@(_level5Loading || string.IsNullOrWhiteSpace(_level5Input))">@L["Send"]</button>
+            </div>
+        </div>
+        <div class="level-solution">@L["L5_Solution"]</div>
+        <div class="level-problem">@L["L5_Problem"]</div>
+    </section>
+
+    <div class="evolution-arrow">@L["L5_Arrow"]</div>
 
     <!-- Level 6: Function Calling -->
     <section id="level6" class="level-section evolved">
         <div class="level-header">
             <span class="level-badge">L6</span>
             <div class="level-title">
-                <h2>🔧 Function Calling</h2>
-                <p>AI 呼叫工具取得即時資料</p>
+                <h2>@L["L6_Title"]</h2>
+                <p>@L["L6_Desc"]</p>
             </div>
-            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(6)">清除</button>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(6)">@L["Clear"]</button>
         </div>
         <details class="code-section">
-            <summary>📄 程式碼</summary>
-            <pre><code>// 定義工具
-[Description("查詢城市天氣")]              // ← 關鍵：加上描述
+            <summary>@L["ViewCode"]</summary>
+            <pre><code>// Define tool
+[Description("Get city weather")]              // Key: Add description
 public static string GetWeather(string city)
 {
-    return $"{city} 目前 25°C 晴天";
+    return $"{city} currently 25°C sunny";
 }
 
-// 把工具傳給 AI
+// Pass tool to AI
 var options = new ChatCompletionOptions();
-options.Tools.Add(ChatTool.CreateFunctionTool(...));  // ← 關鍵
+options.Tools.Add(ChatTool.CreateFunctionTool(...));  // Key
 var response = await chatClient.CompleteChatAsync(messages, options);</code></pre>
         </details>
-        <div class="tools-box">🌤️ 天氣 | 🧮 計算機 | 🔍 文件搜尋 | 📅 預約會議</div>
+        <div class="tools-box">@L["L6_Tools"]</div>
         <div class="level-content">
             <div class="chat-area">
                 @foreach (var msg in _level6Messages)
@@ -236,47 +284,47 @@ var response = await chatClient.CompleteChatAsync(messages, options);</code></pr
                         <span class="msg-text">@((MarkupString)msg.Content)</span>
                     </div>
                 }
-                @if (_level6Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">思考中...</span></div> }
+                @if (_level6Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             @if (_level6ToolCalls.Any())
             {
                 <div class="tool-log">🔧 @string.Join(" → ", _level6ToolCalls.TakeLast(3).Select(t => t.ToolName))</div>
             }
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="試試：「台北天氣」「123*456」" 
+                <input type="text" class="form-control" placeholder="@L["L6_Placeholder"]" 
                        @bind="_level6Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 6)" disabled="@_level6Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(6)" 
-                        disabled="@(_level6Loading || string.IsNullOrWhiteSpace(_level6Input))">發送</button>
+                        disabled="@(_level6Loading || string.IsNullOrWhiteSpace(_level6Input))">@L["Send"]</button>
             </div>
         </div>
-        <div class="level-solution">✅ 解決：可取得即時資料、執行操作</div>
-        <div class="level-problem">⚠️ 新問題：複雜任務需要人類拆解步驟</div>
+        <div class="level-solution">@L["L6_Solution"]</div>
+        <div class="level-problem">@L["L6_Problem"]</div>
     </section>
 
-    <div class="evolution-arrow">⬇️ Agent 自主規劃解決</div>
+    <div class="evolution-arrow">@L["L6_Arrow"]</div>
 
     <!-- Level 7: Agent -->
     <section id="level7" class="level-section evolved">
         <div class="level-header">
             <span class="level-badge">L7</span>
             <div class="level-title">
-                <h2>🤖 Agent 自主代理</h2>
-                <p>AI 自己規劃多步驟，自動調整策略</p>
+                <h2>@L["L7_Title"]</h2>
+                <p>@L["L7_Desc"]</p>
             </div>
-            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(7)">清除</button>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(7)">@L["Clear"]</button>
         </div>
         <details class="code-section">
-            <summary>📄 程式碼</summary>
-            <pre><code>// 建立 Agent，給予工具和指令
-var agent = new AIAgent(chatClient)              // ← 關鍵：用 Agent 包裝
+            <summary>@L["ViewCode"]</summary>
+            <pre><code>// Create Agent with tools and instructions
+var agent = new AIAgent(chatClient)              // Key: Wrap with Agent
 {
-    Instructions = "你可以自己規劃步驟...",
-    Tools = [weatherTool, calculatorTool]        // ← 給予工具
+    Instructions = "You can plan steps yourself...",
+    Tools = [weatherTool, calculatorTool]        // Give tools
 };
 
-// Agent 會自己決定要用哪些工具、執行幾次
-var response = await agent.RunAsync(userMessage);  // ← 關鍵</code></pre>
+// Agent decides which tools to use, how many times
+var response = await agent.RunAsync(userMessage);  // Key</code></pre>
         </details>
         <div class="level-content">
             <div class="chat-area">
@@ -287,65 +335,158 @@ var response = await agent.RunAsync(userMessage);  // ← 關鍵</code></pre>
                         <span class="msg-text">@((MarkupString)msg.Content)</span>
                     </div>
                 }
-                @if (_level7Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">Agent 規劃中...</span></div> }
+                @if (_level7Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["AgentPlanning"]</span></div> }
             </div>
             @if (_level7ToolCalls.Any())
             {
                 <div class="tool-log">🧠 @string.Join(" → ", _level7ToolCalls.TakeLast(5).Select(t => t.ToolName))</div>
             }
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="試試：「查天氣，如果晴天就預約會議室」" 
+                <input type="text" class="form-control" placeholder="@L["L7_Placeholder"]" 
                        @bind="_level7Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 7)" disabled="@_level7Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(7)" 
-                        disabled="@(_level7Loading || string.IsNullOrWhiteSpace(_level7Input))">發送</button>
+                        disabled="@(_level7Loading || string.IsNullOrWhiteSpace(_level7Input))">@L["Send"]</button>
             </div>
         </div>
-        <div class="level-solution">✅ 解決：自主處理複雜多步驟任務</div>
-        <div class="level-problem">⚠️ 新問題：每個工具都要自己開發整合</div>
+        <div class="level-solution">@L["L7_Solution"]</div>
+        <div class="level-problem">@L["L7_Problem"]</div>
     </section>
 
-    <div class="evolution-arrow">⬇️ MCP 標準化解決</div>
+    <div class="evolution-arrow">@L["L7_Arrow"]</div>
 
     <!-- Level 8: MCP -->
     <section id="level8" class="level-section evolved">
         <div class="level-header">
             <span class="level-badge">L8</span>
             <div class="level-title">
-                <h2>🌐 MCP (Model Context Protocol)</h2>
-                <p>標準化工具協議 — 像 USB 即插即用</p>
+                <h2>@L["L8_Title"]</h2>
+                <p>@L["L8_Desc"]</p>
             </div>
         </div>
         <details class="code-section">
-            <summary>📄 程式碼</summary>
-            <pre><code>// 連接 MCP Server（任何相容的服務）
-var mcpClient = await McpClient.CreateAsync(              // ← 關鍵
+            <summary>@L["ViewCode"]</summary>
+            <pre><code>// Connect MCP Server (any compatible service)
+var mcpClient = await McpClient.CreateAsync(              // Key
     new StdioClientTransport("npx", "mcp-server-xxx")
 );
 
-// 自動取得該 Server 提供的所有工具
-var tools = await mcpClient.ListToolsAsync();             // ← 自動發現
+// Auto-discover all tools provided by the Server
+var tools = await mcpClient.ListToolsAsync();             // Auto-discover
 
-// 把工具給 Agent 使用 — 不用自己寫整合程式碼！
+// Give tools to Agent — no custom integration code needed!
 agent.Tools = tools.Select(t => t.ToAITool()).ToList();</code></pre>
         </details>
         <div class="mcp-explanation">
-            <div class="mcp-before">❌ 沒 MCP：每個工具寫不同程式碼</div>
-            <div class="mcp-after">✅ 有 MCP：統一協議，自動發現工具</div>
+            <div class="mcp-before">@L["L8_Before"]</div>
+            <div class="mcp-after">@L["L8_After"]</div>
         </div>
         <div class="mcp-example">
-            <strong>🔗 範例：Microsoft Learn MCP</strong><br />
+            <strong>🔗 Example: Microsoft Learn MCP</strong><br />
             <code>https://learn.microsoft.com/api/mcp</code><br />
-            <small>工具：microsoft_docs_search, microsoft_docs_fetch, microsoft_code_sample_search</small>
+            <small>Tools: microsoft_docs_search, microsoft_docs_fetch, microsoft_code_sample_search</small>
         </div>
-        <div class="level-solution final">🎯 終極解決：標準化讓 AI 能即插即用任何相容服務</div>
+        <div class="level-solution">@L["L8_Final"]</div> <!-- Changed from final class to normal -->
+        <div class="level-problem">@L["L9_Problem"]</div> <!-- Reusing L9 problem text as L8 problem: System becomes complex -->
+    </section>
+
+    <div class="evolution-arrow">⬇️ LangGraph 解決</div>
+
+    <!-- Level 9: LangGraph -->
+    <section id="level9" class="level-section evolved">
+        <div class="level-header">
+            <span class="level-badge">L9</span>
+            <div class="level-title">
+                <h2>@L["L9_Title"]</h2>
+                <p>@L["L9_Desc"]</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(9)">@L["Clear"]</button>
+        </div>
+        <details class="code-section">
+            <summary>@L["ViewCode"]</summary>
+            <pre><code>// Define Graph
+var workflow = new StateGraph&lt;AgentState&gt;("agent")
+    .AddNode("planner", PlannerNode)
+    .AddNode("executor", ExecutorNode)
+    .AddEdge("planner", "executor")
+    .AddConditionalEdges("executor", CheckDone);
+
+var app = workflow.Compile();
+var result = await app.InvokeAsync(inputs);</code></pre>
+        </details>
+        <div class="level-content">
+            <div class="chat-area">
+                @foreach (var msg in _level9Messages)
+                {
+                    <div class="msg @(msg.IsUser ? "user" : "ai")">
+                        <span class="msg-role">@(msg.IsUser ? "👤" : "🤖")</span>
+                        <span class="msg-text">@((MarkupString)msg.Content)</span>
+                    </div>
+                }
+                @if (_level9Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["L9_Desc"]...</span></div> }
+            </div>
+            <div class="input-row">
+                <input type="text" class="form-control" placeholder="@L["L9_Placeholder"]" 
+                       @bind="_level9Input" @bind:event="oninput"
+                       @onkeydown="e => HandleKeyDown(e, 9)" disabled="@_level9Loading" />
+                <button class="btn btn-primary" @onclick="() => SendLevel(9)" 
+                        disabled="@(_level9Loading || string.IsNullOrWhiteSpace(_level9Input))">@L["Send"]</button>
+            </div>
+        </div>
+        <div class="level-solution">@L["L9_Solution"]</div>
+        <div class="level-problem">@L["L9_Problem"]</div>
+    </section>
+
+    <div class="evolution-arrow">@L["L9_Arrow"]</div>
+
+    <!-- Level 10: Observability -->
+    <section id="level10" class="level-section evolved">
+        <div class="level-header">
+            <span class="level-badge">L10</span>
+            <div class="level-title">
+                <h2>@L["L10_Title"]</h2>
+                <p>@L["L10_Desc"]</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" @onclick="() => ClearLevel(10)">@L["Clear"]</button>
+        </div>
+        <details class="code-section">
+            <summary>@L["ViewCode"]</summary>
+            <pre><code>// LangSmith Tracing
+using var trace = LangSmith.Trace("MyAgent");
+trace.LogInput(userMessage);
+
+// ... AI execution ...
+
+trace.LogOutput(response);
+// Dashboard shows: Latency: 1.2s, Tokens: 450, Cost: $0.002</code></pre>
+        </details>
+        <div class="level-content">
+            <div class="chat-area">
+                @foreach (var msg in _level10Messages)
+                {
+                    <div class="msg @(msg.IsUser ? "user" : "ai")">
+                        <span class="msg-role">@(msg.IsUser ? "👤" : "🤖")</span>
+                        <span class="msg-text">@((MarkupString)msg.Content)</span>
+                    </div>
+                }
+                @if (_level10Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"] (Tracing)...</span></div> }
+            </div>
+            <div class="input-row">
+                <input type="text" class="form-control" placeholder="@L["L10_Placeholder"]" 
+                       @bind="_level10Input" @bind:event="oninput"
+                       @onkeydown="e => HandleKeyDown(e, 10)" disabled="@_level10Loading" />
+                <button class="btn btn-primary" @onclick="() => SendLevel(10)" 
+                        disabled="@(_level10Loading || string.IsNullOrWhiteSpace(_level10Input))">@L["Send"]</button>
+            </div>
+        </div>
+        <div class="level-solution final">@L["L10_Final"]</div>
     </section>
 </div>
 
 @code {
-    private string _level1Input = "", _level2Input = "", _level3Input = "", _level4Input = "", _level6Input = "", _level7Input = "";
-    private List<MsgItem> _level1Messages = new(), _level2Messages = new(), _level3Messages = new(), _level4Messages = new(), _level6Messages = new(), _level7Messages = new();
-    private bool _level1Loading, _level2Loading, _level3Loading, _level4Loading, _level6Loading, _level7Loading;
+    private string _level1Input = "", _level2Input = "", _level3Input = "", _level4Input = "", _level5Input = "", _level6Input = "", _level7Input = "", _level9Input = "", _level10Input = "";
+    private List<MsgItem> _level1Messages = new(), _level2Messages = new(), _level3Messages = new(), _level4Messages = new(), _level5Messages = new(), _level6Messages = new(), _level7Messages = new(), _level9Messages = new(), _level10Messages = new();
+    private bool _level1Loading, _level2Loading, _level3Loading, _level4Loading, _level5Loading, _level6Loading, _level7Loading, _level9Loading, _level10Loading;
     private List<(string Role, string Content)> _level4History = new();
     private List<ToolCallInfo> _level6ToolCalls = new(), _level7ToolCalls = new();
     
@@ -359,69 +500,79 @@ agent.Tools = tools.Select(t => t.ToAITool()).ToList();</code></pre>
     };
 
     private async Task HandleKeyDown(KeyboardEventArgs e, int level) { if (e.Key == "Enter") await SendLevel(level); }
-    private async Task SendLevel(int level) { switch (level) { case 1: await ProcessLevel1(); break; case 2: await ProcessLevel2(); break; case 3: await ProcessLevel3(); break; case 4: await ProcessLevel4(); break; case 6: await ProcessLevel6(); break; case 7: await ProcessLevel7(); break; } }
+    private async Task SendLevel(int level) { switch (level) { case 1: await ProcessLevel1(); break; case 2: await ProcessLevel2(); break; case 3: await ProcessLevel3(); break; case 4: await ProcessLevel4(); break; case 5: await ProcessLevel5(); break; case 6: await ProcessLevel6(); break; case 7: await ProcessLevel7(); break; case 9: await ProcessLevel9(); break; case 10: await ProcessLevel10(); break; } }
 
-    private async Task ProcessLevel1() { if (string.IsNullOrWhiteSpace(_level1Input)) return; var msg = _level1Input; _level1Input = ""; _level1Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level1Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatPureAsync(msg); _level1Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level1Messages.Add(new MsgItem { IsUser = false, Content = $"錯誤：{ex.Message}" }); } _level1Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel2() { if (string.IsNullOrWhiteSpace(_level2Input)) return; var msg = _level2Input; _level2Input = ""; _level2Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level2Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithSystemPromptAsync(msg, _systemPrompt); _level2Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level2Messages.Add(new MsgItem { IsUser = false, Content = $"錯誤：{ex.Message}" }); } _level2Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel3() { if (string.IsNullOrWhiteSpace(_level3Input)) return; var msg = _level3Input; _level3Input = ""; _level3Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level3Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithFewShotAsync(msg, _fewShotSystemPrompt, _fewShotExamples); var formatted = $"<code style='background:var(--bg-hover);padding:4px 8px;border-radius:4px;'>{resp}</code>"; _level3Messages.Add(new MsgItem { IsUser = false, Content = formatted }); } catch (Exception ex) { _level3Messages.Add(new MsgItem { IsUser = false, Content = $"錯誤：{ex.Message}" }); } _level3Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel4() { if (string.IsNullOrWhiteSpace(_level4Input)) return; var msg = _level4Input; _level4Input = ""; _level4Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level4Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithHistoryAsync(msg, _systemPrompt, _level4History); _level4Messages.Add(new MsgItem { IsUser = false, Content = resp }); _level4History.Add(("user", msg)); _level4History.Add(("assistant", resp)); } catch (Exception ex) { _level4Messages.Add(new MsgItem { IsUser = false, Content = $"錯誤：{ex.Message}" }); } _level4Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel6() { if (string.IsNullOrWhiteSpace(_level6Input)) return; var msg = _level6Input; _level6Input = ""; _level6Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level6Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.ChatWithToolsAsync(msg, _systemPrompt); _level6ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🔧 {string.Join(", ", tools.Select(t => t.ToolName))}</small>" : ""; _level6Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level6Messages.Add(new MsgItem { IsUser = false, Content = $"錯誤：{ex.Message}" }); } _level6Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel7() { if (string.IsNullOrWhiteSpace(_level7Input)) return; var msg = _level7Input; _level7Input = ""; _level7Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level7Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.RunAgentAsync(msg, _systemPrompt, new()); _level7ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🧠 執行了 {tools.Count} 步驟</small>" : ""; _level7Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level7Messages.Add(new MsgItem { IsUser = false, Content = $"錯誤：{ex.Message}" }); } _level7Loading = false; StateHasChanged(); }
-    private void ClearLevel(int level) { switch (level) { case 1: _level1Messages.Clear(); break; case 2: _level2Messages.Clear(); break; case 3: _level3Messages.Clear(); break; case 4: _level4Messages.Clear(); _level4History.Clear(); break; case 6: _level6Messages.Clear(); _level6ToolCalls.Clear(); break; case 7: _level7Messages.Clear(); _level7ToolCalls.Clear(); break; } }
+    private async Task ProcessLevel1() { if (string.IsNullOrWhiteSpace(_level1Input)) return; var msg = _level1Input; _level1Input = ""; _level1Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level1Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatPureAsync(msg); _level1Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level1Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level1Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel2() { if (string.IsNullOrWhiteSpace(_level2Input)) return; var msg = _level2Input; _level2Input = ""; _level2Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level2Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithSystemPromptAsync(msg, _systemPrompt); _level2Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level2Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level2Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel3() { if (string.IsNullOrWhiteSpace(_level3Input)) return; var msg = _level3Input; _level3Input = ""; _level3Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level3Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithFewShotAsync(msg, _fewShotSystemPrompt, _fewShotExamples); var formatted = $"<code style='background:var(--bg-hover);padding:4px 8px;border-radius:4px;'>{resp}</code>"; _level3Messages.Add(new MsgItem { IsUser = false, Content = formatted }); } catch (Exception ex) { _level3Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level3Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel4() { if (string.IsNullOrWhiteSpace(_level4Input)) return; var msg = _level4Input; _level4Input = ""; _level4Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level4Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithHistoryAsync(msg, _systemPrompt, _level4History); _level4Messages.Add(new MsgItem { IsUser = false, Content = resp }); _level4History.Add(("user", msg)); _level4History.Add(("assistant", resp)); } catch (Exception ex) { _level4Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level4Loading = false; StateHasChanged(); }
+    
+    // Level 5: RAG Simulation
+    private async Task ProcessLevel5() {
+        if (string.IsNullOrWhiteSpace(_level5Input)) return; 
+        var msg = _level5Input; _level5Input = ""; 
+        _level5Messages.Add(new MsgItem { IsUser = true, Content = msg }); 
+        _level5Loading = true; StateHasChanged(); 
+        await Task.Delay(1500); // Simulate search
+        var ragContext = "📜 [系統規章] 第 3 條：員工每年特休 10 天，需提前一週申請。";
+        _level5Messages.Add(new MsgItem { IsUser = false, Content = $"🔍 檢索到資料：<br><code>{ragContext}</code>" });
+        try { 
+            // In real app, we pass context to LLM. Here we simulate or just call LLM pure with augmented prompt
+            var prompt = $"參考資料：{ragContext}\n\n回答問題：{msg}";
+            var resp = await LlmService.ChatPureAsync(prompt); 
+            _level5Messages.Add(new MsgItem { IsUser = false, Content = resp }); 
+        } catch (Exception ex) { _level5Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } 
+        _level5Loading = false; StateHasChanged(); 
+    }
+
+    private async Task ProcessLevel6() { if (string.IsNullOrWhiteSpace(_level6Input)) return; var msg = _level6Input; _level6Input = ""; _level6Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level6Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.ChatWithToolsAsync(msg, _systemPrompt); _level6ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🔧 {string.Join(", ", tools.Select(t => t.ToolName))}</small>" : ""; _level6Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level6Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level6Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel7() { if (string.IsNullOrWhiteSpace(_level7Input)) return; var msg = _level7Input; _level7Input = ""; _level7Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level7Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.RunAgentAsync(msg, _systemPrompt, new()); _level7ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🧠 Ran {tools.Count} steps</small>" : ""; _level7Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level7Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level7Loading = false; StateHasChanged(); }
+
+    // Level 9: LangGraph Simulation
+    private async Task ProcessLevel9() {
+        if (string.IsNullOrWhiteSpace(_level9Input)) return;
+        var msg = _level9Input; _level9Input = "";
+        _level9Messages.Add(new MsgItem { IsUser = true, Content = msg });
+        _level9Loading = true; StateHasChanged();
+        await Task.Delay(1000);
+        _level9Messages.Add(new MsgItem { IsUser = false, Content = "🕸️ [Graph] Start" });
+        await Task.Delay(800);
+        _level9Messages.Add(new MsgItem { IsUser = false, Content = "🟢 [Node] Planner: Analyzing request..." });
+        await Task.Delay(800);
+        _level9Messages.Add(new MsgItem { IsUser = false, Content = "🔵 [Node] Executor: Generating content..." });
+        await Task.Delay(800);
+        try {
+            var resp = await LlmService.ChatPureAsync(msg);
+            _level9Messages.Add(new MsgItem { IsUser = false, Content = $"🏁 [Graph] End: {resp}" });
+        } catch (Exception ex) { _level9Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); }
+        _level9Loading = false; StateHasChanged();
+    }
+
+    // Level 10: Observability Simulation
+    private async Task ProcessLevel10() {
+        if (string.IsNullOrWhiteSpace(_level10Input)) return;
+        var msg = _level10Input; _level10Input = "";
+        _level10Messages.Add(new MsgItem { IsUser = true, Content = msg });
+        _level10Loading = true; StateHasChanged();
+        var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+        try {
+            var resp = await LlmService.ChatPureAsync(msg);
+            stopWatch.Stop();
+            _level10Messages.Add(new MsgItem { IsUser = false, Content = resp });
+            var traceInfo = $@"
+<div style='background:var(--bg-sidebar);padding:8px;border-radius:6px;font-size:12px;margin-top:8px;border-left:3px solid var(--accent)'>
+    <strong>🔬 LangSmith Trace</strong><br/>
+    Trace ID: {Guid.NewGuid()}<br/>
+    Latency: {stopWatch.ElapsedMilliseconds}ms<br/>
+    Tokens: {msg.Length/3 + resp.Length/3} (approx)<br/>
+    Model: gpt-4o<br/>
+    Status: <span style='color:#22c55e'>SUCCESS</span>
+</div>";
+            _level10Messages.Add(new MsgItem { IsUser = false, Content = traceInfo });
+        } catch (Exception ex) { _level10Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); }
+        _level10Loading = false; StateHasChanged();
+    }
+
+    private void ClearLevel(int level) { switch (level) { case 1: _level1Messages.Clear(); break; case 2: _level2Messages.Clear(); break; case 3: _level3Messages.Clear(); break; case 4: _level4Messages.Clear(); _level4History.Clear(); break; case 5: _level5Messages.Clear(); break; case 6: _level6Messages.Clear(); _level6ToolCalls.Clear(); break; case 7: _level7Messages.Clear(); _level7ToolCalls.Clear(); break; case 9: _level9Messages.Clear(); break; case 10: _level10Messages.Clear(); break; } }
     private class MsgItem { public bool IsUser { get; set; } public string Content { get; set; } = ""; }
 }
-
-<style>
-    .playground { max-width: 900px; margin: 0 auto; padding: 24px; }
-    .page-header { text-align: center; margin-bottom: 32px; }
-    .page-header h1 { font-size: 28px; margin: 0 0 8px 0; }
-    .page-header p { color: var(--text-secondary); margin: 0; }
-
-    .evolution-arrow { text-align: center; padding: 12px; color: var(--accent); font-weight: 600; font-size: 14px; }
-
-    .level-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 8px; overflow: hidden; scroll-margin-top: 20px; }
-    .level-section.evolved { border-left: 4px solid var(--accent); }
-
-    .level-header { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); }
-    .level-badge { background: var(--accent); color: white; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; }
-    .level-title { flex: 1; }
-    .level-title h2 { font-size: 16px; margin: 0; }
-    .level-title p { font-size: 13px; color: var(--text-secondary); margin: 0; }
-
-    .code-section { background: #1e1e2e; border-bottom: 1px solid var(--border-color); }
-    .code-section summary { padding: 8px 16px; cursor: pointer; font-size: 13px; color: var(--text-secondary); }
-    .code-section summary:hover { background: var(--bg-hover); }
-    .code-section pre { margin: 0; padding: 12px 16px; overflow-x: auto; }
-    .code-section code { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; color: #e0e0e0; line-height: 1.6; }
-    .code-section .highlight { color: #f9e64f; }
-
-    .prompt-box, .examples-box, .tools-box, .mcp-example { padding: 10px 16px; background: var(--bg-hover); font-size: 13px; color: var(--text-secondary); }
-    .examples-box code, .mcp-example code { background: var(--bg-card); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-
-    .level-content { padding: 16px; }
-    .chat-area { display: flex; flex-direction: column; gap: 8px; min-height: 60px; margin-bottom: 12px; }
-    .msg { display: flex; gap: 8px; max-width: 90%; }
-    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
-    .msg.ai { align-self: flex-start; }
-    .msg-role { font-size: 16px; }
-    .msg-text { padding: 8px 12px; border-radius: 10px; font-size: 14px; line-height: 1.5; }
-    .msg.user .msg-text { background: var(--accent); color: white; }
-    .msg.ai .msg-text { background: var(--bg-hover); }
-    .msg-text.loading { color: var(--text-secondary); font-style: italic; }
-
-    .input-row { display: flex; gap: 8px; }
-    .input-row .form-control { flex: 1; }
-    .tool-log { padding: 8px 12px; background: var(--bg-sidebar); border-radius: 6px; font-size: 12px; color: var(--accent); margin-bottom: 12px; }
-
-    .level-problem, .level-solution { padding: 10px 16px; font-size: 13px; }
-    .level-problem { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-    .level-solution { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
-    .level-solution.final { background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)); color: var(--accent); font-weight: 600; }
-
-    .mcp-explanation { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
-    .mcp-before, .mcp-after { padding: 12px; border-radius: 8px; font-size: 13px; text-align: center; }
-    .mcp-before { background: rgba(239, 68, 68, 0.1); }
-    .mcp-after { background: rgba(34, 197, 94, 0.1); }
-
-    .btn-sm { padding: 6px 12px; font-size: 12px; }
-</style>

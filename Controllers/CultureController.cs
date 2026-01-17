@@ -14,6 +14,14 @@ public class CultureController : Controller
             new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
         );
 
-        return LocalRedirect(returnUrl);
+        // Return a page that forces hard refresh via JavaScript
+        return Content($@"
+<!DOCTYPE html>
+<html>
+<head><meta charset=""utf-8""></head>
+<body>
+<script>window.location.replace('{returnUrl}');</script>
+</body>
+</html>", "text/html");
     }
 }

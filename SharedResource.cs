@@ -1,4 +1,4 @@
-namespace AiLearningLab.Resources;
+namespace AiLearningLab;
 
 /// <summary>
 /// Marker class for shared localization resources.

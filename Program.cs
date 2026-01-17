@@ -15,6 +15,7 @@ builder.Services.AddRazorComponents()
 // Add localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 
 // Configure LLM provider settings (AzureOpenAI / LiteLLM)
 var providerConfig = builder.Configuration.GetSection("LlmProvider");

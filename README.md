@@ -23,9 +23,12 @@ An interactive Blazor web application for teaching AI technology evolution — f
 | L2 | System Prompt | Role/identity | No consistency |
 | L3 | Few-shot | Example outputs | Unpredictable format |
 | L4 | Chat Memory | Conversation history | Forgetful AI |
+| L5 | RAG | Document retrieval | AI lacks private knowledge |
 | L6 | Function Calling | Tool invocation | No real-time data |
 | L7 | Agent | Multi-step reasoning | Manual orchestration |
 | L8 | MCP | Standard protocol | Tool integration effort |
+| L9 | LangGraph | Graph-based flows | Uncontrollable complex tasks |
+| L10 | Observability | Monitoring & Debugging | AI behavior black box |
 
 ## 🚀 Quick Start
 
