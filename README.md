@@ -2,7 +2,8 @@
 
 An interactive Blazor web application for teaching AI technology evolution — from basic LLM calls to MCP (Model Context Protocol).
 
-[🇺🇸 English](translations/en/README.md)
+[🇹🇼 繁體中文](translations/zh-TW/README.md)
+
 
 ## 📊 AI Technology Evolution
 
