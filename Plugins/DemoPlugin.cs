@@ -21,59 +21,53 @@ public class DemoPlugin
         });
     }
 
-    [Description("取得指定城市的天氣資訊")]
-    public string GetWeather(
-        [Description("城市名稱，例如：台北、東京、紐約")] string city)
+    [Description("查詢訂單狀態")]
+    public string GetOrderStatus(
+        [Description("訂單編號，例如：ORD-12345")] string orderId)
     {
-        // 模擬天氣資料
-        var weathers = new Dictionary<string, (int Temp, string Condition)>
+        // 模擬訂單資料
+        var orders = new Dictionary<string, (string Status, string Item, bool CanReturn)>
         {
-            ["台北"] = (25, "晴天 ☀️"),
-            ["東京"] = (18, "多雲 ⛅"),
-            ["紐約"] = (12, "陰天 🌥️"),
-            ["倫敦"] = (8, "小雨 🌧️"),
-            ["北京"] = (15, "霧霾 🌫️")
+            ["ORD-2024001"] = ("已完成", "藍色襯衫", true),
+            ["ORD-2024002"] = ("運送中", "無線耳機", false),
+            ["ORD-2024003"] = ("已完成", "生鮮食品", false) // 生鮮不可退
         };
 
-        var (temp, condition) = weathers.GetValueOrDefault(city, (20, "晴天 ☀️"));
-        var result = $"{{\"city\": \"{city}\", \"temperature\": {temp}, \"condition\": \"{condition}\"}}";
-        
-        RecordToolCall("GetWeather", $"city: {city}", result);
-        return result;
-    }
-
-    [Description("計算數學表達式")]
-    public string Calculate(
-        [Description("數學表達式，例如：2+2 或 (10*5)/2")] string expression)
-    {
-        try
+        if (orders.TryGetValue(orderId, out var info))
         {
-            // 簡易計算器 (實際應用應使用安全的表達式計算庫)
-            var result = new System.Data.DataTable().Compute(expression, null);
-            var output = $"{{\"expression\": \"{expression}\", \"result\": {result}}}";
-            
-            RecordToolCall("Calculate", $"expression: {expression}", output);
-            return output;
+            var result = $"{{\"orderId\": \"{orderId}\", \"item\": \"{info.Item}\", \"status\": \"{info.Status}\", \"canReturn\": {info.CanReturn.ToString().ToLower()}}}";
+            RecordToolCall("GetOrderStatus", $"orderId: {orderId}", result);
+            return result;
         }
-        catch
+        else
         {
-            var error = $"{{\"error\": \"無法計算表達式: {expression}\"}}";
-            RecordToolCall("Calculate", $"expression: {expression}", error);
+            var error = $"{{\"error\": \"找不到訂單 {orderId}\"}}";
+            RecordToolCall("GetOrderStatus", $"orderId: {orderId}", error);
             return error;
         }
+    }
+
+    [Description("提交退貨申請")]
+    public string SubmitReturnRequest(
+        [Description("訂單編號")] string orderId,
+        [Description("退貨原因")] string reason)
+    {
+        var result = $"{{\"success\": true, \"orderId\": \"{orderId}\", \"message\": \"退貨申請已受理，請於 3 日內將商品寄回。退貨原因：{reason}\"}}";
+        RecordToolCall("SubmitReturnRequest", $"orderId: {orderId}, reason: {reason}", result);
+        return result;
     }
 
     [Description("搜尋內部文件庫 (模擬 RAG)")]
     public string SearchDocuments(
         [Description("搜尋關鍵字")] string query)
     {
-        // 模擬文件搜尋結果
+        // 模擬文件搜尋結果 (退貨相關)
         var docs = new Dictionary<string, string>
         {
-            ["請假"] = "根據公司規定，員工每年有 14 天特休假。請假需提前 3 天申請，緊急情況除外。",
-            ["報帳"] = "報帳流程：1. 填寫報帳單 2. 附上收據 3. 主管簽核 4. 送財務部審核。",
-            ["會議室"] = "會議室預約請使用內部系統，最多可預約 2 週內的時段，單次最長 2 小時。",
-            ["加班"] = "加班需事先申請，平日加班費為時薪 1.33 倍，假日為 2 倍。"
+            ["退貨政策"] = "本公司提供 7 天鑑賞期。生鮮食品、衛生用品若拆封概不接受退貨。一般商品需保持包裝完整。",
+            ["退款流程"] = "退貨申請核准後，款項將於 3-5 個工作天內刷退至原信用卡。若為貨到付款，將匯款至指定帳戶。",
+            ["運費說明"] = "退貨產生的運費由買家自行負擔，除非商品有瑕疵或寄錯商品。滿 2000 元訂單享有免費到府收件服務。",
+            ["換貨須知"] = "若商品尺寸不合，可申請換貨一次。請在訂單頁面選擇「申請換貨」並註明正確尺寸。"
         };
 
         var results = docs
@@ -96,31 +90,6 @@ public class DemoPlugin
         var result = $"{{\"datetime\": \"{now:yyyy-MM-dd HH:mm:ss}\", \"dayOfWeek\": \"{now:dddd}\"}}";
         
         RecordToolCall("GetCurrentTime", "", result);
-        return result;
-    }
-
-    [Description("預約會議室")]
-    public string BookMeeting(
-        [Description("會議室名稱")] string room,
-        [Description("日期，格式 YYYY-MM-DD")] string date,
-        [Description("開始時間，格式 HH:MM")] string startTime,
-        [Description("會議時長（小時）")] int durationHours)
-    {
-        // 模擬預約邏輯
-        var random = new Random();
-        var success = random.Next(100) > 30; // 70% 成功率
-
-        string result;
-        if (success)
-        {
-            result = $"{{\"success\": true, \"room\": \"{room}\", \"date\": \"{date}\", \"time\": \"{startTime}\", \"duration\": {durationHours}, \"confirmationCode\": \"MTG-{random.Next(1000, 9999)}\"}}";
-        }
-        else
-        {
-            result = $"{{\"success\": false, \"reason\": \"會議室 {room} 在 {date} {startTime} 已被預約\"}}";
-        }
-        
-        RecordToolCall("BookMeeting", $"room: {room}, date: {date}, time: {startTime}, duration: {durationHours}h", result);
         return result;
     }
 }

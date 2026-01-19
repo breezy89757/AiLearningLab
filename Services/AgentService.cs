@@ -30,8 +30,7 @@ public class AgentService
     public async Task<(string Response, List<ToolCallInfo> ToolCalls)> ChatWithToolsAsync(
         string userMessage,
         string systemPrompt,
-        bool enableWeather = true,
-        bool enableCalculator = true,
+        bool enableOrderTools = true,
         bool enableSearch = false,
         CancellationToken ct = default)
     {
@@ -42,13 +41,10 @@ public class AgentService
         
         var demoPlugin = new DemoPlugin();
 
-        if (enableWeather)
+        if (enableOrderTools)
         {
-            tools.Add(AIFunctionFactory.Create(demoPlugin.GetWeather));
-        }
-        if (enableCalculator)
-        {
-            tools.Add(AIFunctionFactory.Create(demoPlugin.Calculate));
+            tools.Add(AIFunctionFactory.Create(demoPlugin.GetOrderStatus));
+            tools.Add(AIFunctionFactory.Create(demoPlugin.SubmitReturnRequest));
         }
         if (enableSearch)
         {
@@ -91,11 +87,10 @@ public class AgentService
 
         var tools = new List<AITool>
         {
-            AIFunctionFactory.Create(demoPlugin.GetWeather),
-            AIFunctionFactory.Create(demoPlugin.Calculate),
+            AIFunctionFactory.Create(demoPlugin.GetOrderStatus),
+            AIFunctionFactory.Create(demoPlugin.SubmitReturnRequest),
             AIFunctionFactory.Create(demoPlugin.SearchDocuments),
-            AIFunctionFactory.Create(demoPlugin.GetCurrentTime),
-            AIFunctionFactory.Create(demoPlugin.BookMeeting)
+            AIFunctionFactory.Create(demoPlugin.GetCurrentTime)
         };
 
         var agent = _chatClient.CreateAIAgent(

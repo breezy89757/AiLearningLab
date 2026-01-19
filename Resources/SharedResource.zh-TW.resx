@@ -47,8 +47,16 @@
   <!-- Level 6 -->
   <data name="L6_Title" xml:space="preserve"><value>🔧 Function Calling</value></data>
   <data name="L6_Desc" xml:space="preserve"><value>AI 呼叫工具取得即時資料</value></data>
-  <data name="L6_Tools" xml:space="preserve"><value>🌤️ 天氣 | 🧮 計算機 | 🔍 文件搜尋 | 📅 預約會議</value></data>
-  <data name="L6_Placeholder" xml:space="preserve"><value>試試：「台北天氣」「123*456」</value></data>
+  <!-- Level 5 -->
+  <data name="L5_Placeholder" xml:space="preserve">
+    <value>試試：「退貨需要運費嗎？」(AI 會去查規章)</value>
+  </data>
+
+  <!-- Level 6 -->
+  <data name="L6_Title" xml:space="preserve"><value>🔧 Function Calling</value></data>
+  <data name="L6_Desc" xml:space="preserve"><value>AI 呼叫工具取得即時資料</value></data>
+  <data name="L6_Tools" xml:space="preserve"><value>📦 訂單查詢 | 📝 提交退貨 | 🔍 規章搜尋</value></data>
+  <data name="L6_Placeholder" xml:space="preserve"><value>試試：「查詢 ORD-2024001 狀態」「我要退貨」</value></data>
   <data name="L6_Solution" xml:space="preserve"><value>✅ 解決：可取得即時資料、執行操作</value></data>
   <data name="L6_Problem" xml:space="preserve"><value>⚠️ 新問題：複雜任務需要人類拆解步驟</value></data>
   <data name="L6_Arrow" xml:space="preserve"><value>⬇️ Agent 自主規劃解決</value></data>
@@ -56,7 +64,7 @@
   <!-- Level 7 -->
   <data name="L7_Title" xml:space="preserve"><value>🤖 Agent 自主代理</value></data>
   <data name="L7_Desc" xml:space="preserve"><value>AI 自己規劃多步驟，自動調整策略</value></data>
-  <data name="L7_Placeholder" xml:space="preserve"><value>試試：「查天氣，如果晴天就預約會議室」</value></data>
+  <data name="L7_Placeholder" xml:space="preserve"><value>試試：「查詢 ORD-2024001，如果可以退貨就提交申請，原因是不喜歡」</value></data>
   <data name="L7_Solution" xml:space="preserve"><value>✅ 解決：自主處理複雜多步驟任務</value></data>
   <data name="L7_Problem" xml:space="preserve"><value>⚠️ 新問題：每個工具都要自己開發整合</value></data>
   <data name="L7_Arrow" xml:space="preserve"><value>⬇️ MCP 標準化解決</value></data>
@@ -84,7 +92,7 @@
     <value>讓 AI 讀文件，回答訓練資料以外的知識</value>
   </data>
   <data name="L5_Placeholder" xml:space="preserve">
-    <value>試試：「公司請假規定是什麼？」(AI 會去查規章)</value>
+    <value>試試：「退貨需要運費嗎？」(AI 會去查規章)</value>
   </data>
   <data name="L5_Solution" xml:space="preserve">
     <value>✅ 解決：AI 擁有私有或最新的知識</value>
@@ -103,7 +111,7 @@
     <value>用圖形定義流程，比單純 Agent 更可控</value>
   </data>
   <data name="L9_Placeholder" xml:space="preserve">
-    <value>試試：「寫一篇關於 AI 的文章並翻譯成英文」</value>
+    <value>試試：「幫我擬定一份退貨處理的標準作業程序(SOP)，並翻譯成英文」</value>
   </data>
   <data name="L9_Solution" xml:space="preserve">
     <value>✅ 解決：複雜流程可控，支援循環與狀態管理</value>

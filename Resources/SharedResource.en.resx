@@ -47,8 +47,16 @@
   <!-- Level 6 -->
   <data name="L6_Title" xml:space="preserve"><value>🔧 Function Calling</value></data>
   <data name="L6_Desc" xml:space="preserve"><value>AI calls tools to get real-time data</value></data>
-  <data name="L6_Tools" xml:space="preserve"><value>🌤️ Weather | 🧮 Calculator | 🔍 Document Search | 📅 Book Meeting</value></data>
-  <data name="L6_Placeholder" xml:space="preserve"><value>Try: "Taipei weather" or "123*456"</value></data>
+  <!-- Level 5 -->
+  <data name="L5_Placeholder" xml:space="preserve">
+    <value>Try: "Do I need to pay for return shipping?" (AI checks the policy)</value>
+  </data>
+
+  <!-- Level 6 -->
+  <data name="L6_Title" xml:space="preserve"><value>🔧 Function Calling</value></data>
+  <data name="L6_Desc" xml:space="preserve"><value>AI calls tools to get real-time data</value></data>
+  <data name="L6_Tools" xml:space="preserve"><value>📦 Order Status | 📝 Submit Return | 🔍 Policy Search</value></data>
+  <data name="L6_Placeholder" xml:space="preserve"><value>Try: "Check order ORD-2024001" or "I want to return item"</value></data>
   <data name="L6_Solution" xml:space="preserve"><value>✅ Solved: Can get real-time data and execute operations</value></data>
   <data name="L6_Problem" xml:space="preserve"><value>⚠️ New Problem: Complex tasks require humans to break down steps</value></data>
   <data name="L6_Arrow" xml:space="preserve"><value>⬇️ Solved with Agent autonomous planning</value></data>
@@ -56,7 +64,7 @@
   <!-- Level 7 -->
   <data name="L7_Title" xml:space="preserve"><value>🤖 Agent</value></data>
   <data name="L7_Desc" xml:space="preserve"><value>AI plans multi-step tasks autonomously, adjusts strategy automatically</value></data>
-  <data name="L7_Placeholder" xml:space="preserve"><value>Try: "Check weather, if sunny book a meeting room"</value></data>
+  <data name="L7_Placeholder" xml:space="preserve"><value>Try: "Check ORD-2024001, if returnable then submit request for reason: too small"</value></data>
   <data name="L7_Solution" xml:space="preserve"><value>✅ Solved: Autonomously handles complex multi-step tasks</value></data>
   <data name="L7_Problem" xml:space="preserve"><value>⚠️ New Problem: Each tool needs custom integration</value></data>
   <data name="L7_Arrow" xml:space="preserve"><value>⬇️ Solved with MCP standardization</value></data>
@@ -84,7 +92,7 @@
     <value>Let AI read documents to answer questions beyond training data</value>
   </data>
   <data name="L5_Placeholder" xml:space="preserve">
-    <value>Try: "What is the leave policy?" (AI checks the manual)</value>
+    <value>Try: "Do I need to pay for return shipping?" (AI checks the policy)</value>
   </data>
   <data name="L5_Solution" xml:space="preserve">
     <value>✅ Solved: AI has access to private or up-to-date knowledge</value>
@@ -103,7 +111,7 @@
     <value>Define flows with graphs, more controllable than simple Agents</value>
   </data>
   <data name="L9_Placeholder" xml:space="preserve">
-    <value>Try: "Write an article about AI and translate it to Spanish"</value>
+    <value>Try: "Draft a Standard Operating Procedure (SOP) for returns and translate to Spanish"</value>
   </data>
   <data name="L9_Solution" xml:space="preserve">
     <value>✅ Solved: Control complex flows, support loops and state management</value>

@@ -27,11 +27,7 @@
         </div>
         <details class="code-section">
             <summary>@L["ViewCode"]</summary>
-            <pre><code>var messages = new List&lt;ChatMessage&gt;
-{
-    new UserChatMessage(userMessage)
-};
-var response = await chatClient.CompleteChatAsync(messages);</code></pre>
+            <pre><code>var response = await chatClient.CompleteChatAsync("@GetDisplayInput(_level1Input, _level1LastInput)");</code></pre>
         </details>
         <div class="level-content">
             <div class="chat-area">
@@ -45,7 +41,7 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
                 @if (_level1Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="@L["L1_Placeholder"]" 
+                <input type="text" class="form-control" placeholder="試試：退貨流程是什麼？" 
                        @bind="_level1Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 1)" disabled="@_level1Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(1)" 
@@ -69,12 +65,9 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
         </div>
         <details class="code-section">
             <summary>@L["ViewCode"]</summary>
-            <pre><code>var messages = new List&lt;ChatMessage&gt;
-{
-    new SystemChatMessage(systemPrompt),  // Key: Add System Prompt
-    new UserChatMessage(userMessage)
-};
-var response = await chatClient.CompleteChatAsync(messages);</code></pre>
+            <pre><code>var systemPrompt = "你是電商客服，退貨期限 7 天...";
+var userMessage = "@GetDisplayInput(_level2Input, _level2LastInput)";
+var response = await chatClient.CompleteChatAsync(userMessage, systemPrompt);</code></pre>
         </details>
         <div class="prompt-box">📝 @_systemPrompt</div>
         <div class="level-content">
@@ -89,7 +82,7 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
                 @if (_level2Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="@L["L2_Placeholder"]" 
+                <input type="text" class="form-control" placeholder="試試：退貨期限是幾天？ (有 System Prompt)" 
                        @bind="_level2Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 2)" disabled="@_level2Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(2)" 
@@ -114,19 +107,20 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
         </div>
         <details class="code-section">
             <summary>@L["ViewCode"]</summary>
-            <pre><code>var messages = new List&lt;ChatMessage&gt;
+            <pre><code>var systemPrompt = "擷取退貨商品與原因，輸出 JSON";
+// Few-shot Examples (Teaching by example)
+var examples = new [] 
 {
-    new SystemChatMessage("Sentiment analyzer, output JSON"),
-    // Example conversation: teach AI output format
-    new UserChatMessage("This product is great"),
-    new AssistantChatMessage("{\"sentiment\":\"positive\",\"score\":0.95}"),
-    new UserChatMessage(userMessage)  // Actual question
+    ("我要退藍色襯衫，因為太小", "{\"item\":\"藍色襯衫\",\"reason\":\"太小\"}"),
+    ("退貨無線耳機，音質不好", "{\"item\":\"無線耳機\",\"reason\":\"音質不好\"}")
 };
-var response = await chatClient.CompleteChatAsync(messages);</code></pre>
+
+var userMessage = "@GetDisplayInput(_level3Input, _level3LastInput)";
+var response = await chatClient.CompleteChatAsync(userMessage, systemPrompt, examples);</code></pre>
         </details>
         <div class="examples-box">
             <strong>@L["Example"]：</strong>
-            <code>"This is great" → {{"sentiment":"positive","score":0.95}}</code>
+            <code>"我要退這件衣服" → {{"item":"衣服","reason":"(未提供)"}}</code>
         </div>
         <div class="level-content">
             <div class="chat-area">
@@ -140,7 +134,7 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
                 @if (_level3Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="@L["L3_Placeholder"]" 
+                <input type="text" class="form-control" placeholder="試試：收到褲子結果破洞了 (擷取退貨資訊)" 
                        @bind="_level3Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 3)" disabled="@_level3Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(3)" 
@@ -175,7 +169,7 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
             ? new UserChatMessage(content)
             : new AssistantChatMessage(content));
     }
-    messages.Add(new UserChatMessage(newMessage));
+    messages.Add(new UserChatMessage("@GetDisplayInput(_level4Input, _level4LastInput)"));
 };
 var response = await chatClient.CompleteChatAsync(messages);</code></pre>
         </details>
@@ -216,12 +210,11 @@ var response = await chatClient.CompleteChatAsync(messages);</code></pre>
         </div>
         <details class="code-section">
             <summary>@L["ViewCode"]</summary>
-            <pre><code>// 1. Retrieve relevant docs from Vector DB
-var docs = await searchService.SearchAsync(userMessage);
+            <pre><code>// 1. Search Return Policy
+var policy = "退貨規章：生鮮食品不可退貨，3C 產品需在 7 天內...";
 
-// 2. Add docs to context
-var context = string.Join("\n", docs);
-var prompt = $"Context: {context}\n\nQuestion: {userMessage}";
+// 2. Add policy to prompt
+var prompt = $"參考規章：{policy}\n\n回答用戶退貨問題：@GetDisplayInput(_level5Input, _level5LastInput)";
 
 var response = await chatClient.CompleteChatAsync(prompt);</code></pre>
         </details>
@@ -237,7 +230,7 @@ var response = await chatClient.CompleteChatAsync(prompt);</code></pre>
                 @if (_level5Loading) { <div class="msg ai"><span class="msg-role">🤖</span><span class="msg-text loading">@L["Thinking"]</span></div> }
             </div>
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="@L["L5_Placeholder"]" 
+                <input type="text" class="form-control" placeholder="試試：生鮮食品可以退嗎？ (RAG 檢索)" 
                        @bind="_level5Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 5)" disabled="@_level5Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(5)" 
@@ -262,17 +255,14 @@ var response = await chatClient.CompleteChatAsync(prompt);</code></pre>
         </div>
         <details class="code-section">
             <summary>@L["ViewCode"]</summary>
-            <pre><code>// Define tool
-[Description("Get city weather")]              // Key: Add description
-public static string GetWeather(string city)
-{
-    return $"{city} currently 25°C sunny";
-}
+            <pre><code>// Define Tool
+[Description("查詢訂單狀態")]
+public static string GetOrderStatus(string orderId) { ... }
 
 // Pass tool to AI
 var options = new ChatCompletionOptions();
-options.Tools.Add(ChatTool.CreateFunctionTool(...));  // Key
-var response = await chatClient.CompleteChatAsync(messages, options);</code></pre>
+options.Tools.Add(GetOrderStatus); 
+var response = await chatClient.CompleteChatAsync("@GetDisplayInput(_level6Input, _level6LastInput)", options);</code></pre>
         </details>
         <div class="tools-box">@L["L6_Tools"]</div>
         <div class="level-content">
@@ -291,7 +281,7 @@ var response = await chatClient.CompleteChatAsync(messages, options);</code></pr
                 <div class="tool-log">🔧 @string.Join(" → ", _level6ToolCalls.TakeLast(3).Select(t => t.ToolName))</div>
             }
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="@L["L6_Placeholder"]" 
+                <input type="text" class="form-control" placeholder="試試：幫我查訂單 ORD-2024001" 
                        @bind="_level6Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 6)" disabled="@_level6Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(6)" 
@@ -316,15 +306,14 @@ var response = await chatClient.CompleteChatAsync(messages, options);</code></pr
         </div>
         <details class="code-section">
             <summary>@L["ViewCode"]</summary>
-            <pre><code>// Create Agent with tools and instructions
-var agent = new AIAgent(chatClient)              // Key: Wrap with Agent
+            <pre><code>// Create Agent
+var agent = new AIAgent(chatClient) 
 {
-    Instructions = "You can plan steps yourself...",
-    Tools = [weatherTool, calculatorTool]        // Give tools
+    Instructions = "你負責處理退貨，先檢查狀態，符合資格再提交申請...",
+    Tools = [GetOrderStatus, SubmitReturnRequest]
 };
 
-// Agent decides which tools to use, how many times
-var response = await agent.RunAsync(userMessage);  // Key</code></pre>
+var response = await agent.RunAsync("@GetDisplayInput(_level7Input, _level7LastInput)");</code></pre>
         </details>
         <div class="level-content">
             <div class="chat-area">
@@ -342,7 +331,7 @@ var response = await agent.RunAsync(userMessage);  // Key</code></pre>
                 <div class="tool-log">🧠 @string.Join(" → ", _level7ToolCalls.TakeLast(5).Select(t => t.ToolName))</div>
             }
             <div class="input-row">
-                <input type="text" class="form-control" placeholder="@L["L7_Placeholder"]" 
+                <input type="text" class="form-control" placeholder="試試：我要退貨 ORD-2024001 因為尺寸不合" 
                        @bind="_level7Input" @bind:event="oninput"
                        @onkeydown="e => HandleKeyDown(e, 7)" disabled="@_level7Loading" />
                 <button class="btn btn-primary" @onclick="() => SendLevel(7)" 
@@ -412,7 +401,7 @@ var workflow = new StateGraph&lt;AgentState&gt;("agent")
     .AddConditionalEdges("executor", CheckDone);
 
 var app = workflow.Compile();
-var result = await app.InvokeAsync(inputs);</code></pre>
+var result = await app.InvokeAsync("@GetDisplayInput(_level9Input, _level9LastInput)");</code></pre>
         </details>
         <div class="level-content">
             <div class="chat-area">
@@ -453,7 +442,7 @@ var result = await app.InvokeAsync(inputs);</code></pre>
             <summary>@L["ViewCode"]</summary>
             <pre><code>// LangSmith Tracing
 using var trace = LangSmith.Trace("MyAgent");
-trace.LogInput(userMessage);
+trace.LogInput("@GetDisplayInput(_level10Input, _level10LastInput)");
 
 // ... AI execution ...
 
@@ -485,36 +474,40 @@ trace.LogOutput(response);
 
 @code {
     private string _level1Input = "", _level2Input = "", _level3Input = "", _level4Input = "", _level5Input = "", _level6Input = "", _level7Input = "", _level9Input = "", _level10Input = "";
+    private string _level1LastInput = "退貨流程", _level2LastInput = "退貨流程", _level3LastInput = "我要退藍色襯衫，因為太小", _level4LastInput = "我叫小明", _level5LastInput = "退貨需要運費嗎？", _level6LastInput = "我的訂單 ORD-123 狀況?", _level7LastInput = "我要退貨 ORD-123", _level9LastInput = "寫一篇關於 AI 的文章並翻譯成英文", _level10LastInput = "你好";
+    
     private List<MsgItem> _level1Messages = new(), _level2Messages = new(), _level3Messages = new(), _level4Messages = new(), _level5Messages = new(), _level6Messages = new(), _level7Messages = new(), _level9Messages = new(), _level10Messages = new();
     private bool _level1Loading, _level2Loading, _level3Loading, _level4Loading, _level5Loading, _level6Loading, _level7Loading, _level9Loading, _level10Loading;
     private List<(string Role, string Content)> _level4History = new();
     private List<ToolCallInfo> _level6ToolCalls = new(), _level7ToolCalls = new();
     
-    private string _systemPrompt = "你是「快樂購物」電商客服。規則：回答簡潔、退貨期限 7 天、滿 500 免運。";
-    private string _fewShotSystemPrompt = "你是情感分析助手。分析用戶評論的情感，輸出 JSON 格式。";
+    private string _systemPrompt = "你是「快樂購物」電商客服。規則：回答簡潔、退貨期限 7 天、滿 500 免運。生鮮食品不可退貨。";
+    private string _fewShotSystemPrompt = "你是退貨資訊擷取助手。請分析用戶對話，擷取「退貨商品(Item)」與「退貨原因(Reason)」。輸出 JSON 格式。";
     private List<(string User, string Assistant)> _fewShotExamples = new()
     {
-        ("這產品超棒！", "{\"sentiment\":\"positive\",\"score\":0.95}"),
-        ("爛透了完全不能用", "{\"sentiment\":\"negative\",\"score\":0.92}"),
-        ("還可以吧普普通通", "{\"sentiment\":\"neutral\",\"score\":0.60}")
+        ("這件藍色襯衫太小了", "{\"item\":\"藍色襯衫\",\"reason\":\"尺寸太小\"}"),
+        ("收到的耳機有雜音", "{\"item\":\"耳機\",\"reason\":\"功能瑕疵/雜音\"}"),
+        ("我不想要這個了", "{\"item\":\"(未指定)\",\"reason\":\"個人因素\"}")
     };
+
+    private string GetDisplayInput(string current, string last) => string.IsNullOrWhiteSpace(current) ? last : current;
 
     private async Task HandleKeyDown(KeyboardEventArgs e, int level) { if (e.Key == "Enter") await SendLevel(level); }
     private async Task SendLevel(int level) { switch (level) { case 1: await ProcessLevel1(); break; case 2: await ProcessLevel2(); break; case 3: await ProcessLevel3(); break; case 4: await ProcessLevel4(); break; case 5: await ProcessLevel5(); break; case 6: await ProcessLevel6(); break; case 7: await ProcessLevel7(); break; case 9: await ProcessLevel9(); break; case 10: await ProcessLevel10(); break; } }
 
-    private async Task ProcessLevel1() { if (string.IsNullOrWhiteSpace(_level1Input)) return; var msg = _level1Input; _level1Input = ""; _level1Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level1Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatPureAsync(msg); _level1Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level1Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level1Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel2() { if (string.IsNullOrWhiteSpace(_level2Input)) return; var msg = _level2Input; _level2Input = ""; _level2Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level2Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithSystemPromptAsync(msg, _systemPrompt); _level2Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level2Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level2Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel3() { if (string.IsNullOrWhiteSpace(_level3Input)) return; var msg = _level3Input; _level3Input = ""; _level3Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level3Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithFewShotAsync(msg, _fewShotSystemPrompt, _fewShotExamples); var formatted = $"<code style='background:var(--bg-hover);padding:4px 8px;border-radius:4px;'>{resp}</code>"; _level3Messages.Add(new MsgItem { IsUser = false, Content = formatted }); } catch (Exception ex) { _level3Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level3Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel4() { if (string.IsNullOrWhiteSpace(_level4Input)) return; var msg = _level4Input; _level4Input = ""; _level4Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level4Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithHistoryAsync(msg, _systemPrompt, _level4History); _level4Messages.Add(new MsgItem { IsUser = false, Content = resp }); _level4History.Add(("user", msg)); _level4History.Add(("assistant", resp)); } catch (Exception ex) { _level4Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level4Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel1() { if (string.IsNullOrWhiteSpace(_level1Input)) return; var msg = _level1Input; _level1LastInput = msg; _level1Input = ""; _level1Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level1Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatPureAsync(msg); _level1Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level1Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level1Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel2() { if (string.IsNullOrWhiteSpace(_level2Input)) return; var msg = _level2Input; _level2LastInput = msg; _level2Input = ""; _level2Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level2Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithSystemPromptAsync(msg, _systemPrompt); _level2Messages.Add(new MsgItem { IsUser = false, Content = resp }); } catch (Exception ex) { _level2Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level2Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel3() { if (string.IsNullOrWhiteSpace(_level3Input)) return; var msg = _level3Input; _level3LastInput = msg; _level3Input = ""; _level3Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level3Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithFewShotAsync(msg, _fewShotSystemPrompt, _fewShotExamples); var formatted = $"<code style='background:var(--bg-hover);padding:4px 8px;border-radius:4px;'>{resp}</code>"; _level3Messages.Add(new MsgItem { IsUser = false, Content = formatted }); } catch (Exception ex) { _level3Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level3Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel4() { if (string.IsNullOrWhiteSpace(_level4Input)) return; var msg = _level4Input; _level4LastInput = msg; _level4Input = ""; _level4Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level4Loading = true; StateHasChanged(); try { var resp = await LlmService.ChatWithHistoryAsync(msg, _systemPrompt, _level4History); _level4Messages.Add(new MsgItem { IsUser = false, Content = resp }); _level4History.Add(("user", msg)); _level4History.Add(("assistant", resp)); } catch (Exception ex) { _level4Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level4Loading = false; StateHasChanged(); }
     
     // Level 5: RAG Simulation
     private async Task ProcessLevel5() {
         if (string.IsNullOrWhiteSpace(_level5Input)) return; 
-        var msg = _level5Input; _level5Input = ""; 
+        var msg = _level5Input; _level5LastInput = msg; _level5Input = ""; 
         _level5Messages.Add(new MsgItem { IsUser = true, Content = msg }); 
         _level5Loading = true; StateHasChanged(); 
-        await Task.Delay(1500); // Simulate search
-        var ragContext = "📜 [系統規章] 第 3 條：員工每年特休 10 天，需提前一週申請。";
+        await Task.Delay(1000); // Simulate search
+        var ragContext = "📜 [退貨規章] 1. 生鮮食品一經出貨概不接受退貨。 2. 3C 產品若已拆封，非瑕疵品不得退貨。 3. 一般商品享有 7 天鑑賞期。";
         _level5Messages.Add(new MsgItem { IsUser = false, Content = $"🔍 檢索到資料：<br><code>{ragContext}</code>" });
         try { 
             // In real app, we pass context to LLM. Here we simulate or just call LLM pure with augmented prompt
@@ -525,13 +518,13 @@ trace.LogOutput(response);
         _level5Loading = false; StateHasChanged(); 
     }
 
-    private async Task ProcessLevel6() { if (string.IsNullOrWhiteSpace(_level6Input)) return; var msg = _level6Input; _level6Input = ""; _level6Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level6Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.ChatWithToolsAsync(msg, _systemPrompt); _level6ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🔧 {string.Join(", ", tools.Select(t => t.ToolName))}</small>" : ""; _level6Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level6Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level6Loading = false; StateHasChanged(); }
-    private async Task ProcessLevel7() { if (string.IsNullOrWhiteSpace(_level7Input)) return; var msg = _level7Input; _level7Input = ""; _level7Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level7Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.RunAgentAsync(msg, _systemPrompt, new()); _level7ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🧠 Ran {tools.Count} steps</small>" : ""; _level7Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level7Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level7Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel6() { if (string.IsNullOrWhiteSpace(_level6Input)) return; var msg = _level6Input; _level6LastInput = msg; _level6Input = ""; _level6Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level6Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.ChatWithToolsAsync(msg, _systemPrompt); _level6ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🔧 {string.Join(", ", tools.Select(t => t.ToolName))}</small>" : ""; _level6Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level6Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level6Loading = false; StateHasChanged(); }
+    private async Task ProcessLevel7() { if (string.IsNullOrWhiteSpace(_level7Input)) return; var msg = _level7Input; _level7LastInput = msg; _level7Input = ""; _level7Messages.Add(new MsgItem { IsUser = true, Content = msg }); _level7Loading = true; StateHasChanged(); try { var (resp, tools) = await AgentService.RunAgentAsync(msg, _systemPrompt, new()); _level7ToolCalls.AddRange(tools); var toolInfo = tools.Any() ? $"<br><small style='color:var(--accent)'>🧠 Ran {tools.Count} steps</small>" : ""; _level7Messages.Add(new MsgItem { IsUser = false, Content = resp + toolInfo }); } catch (Exception ex) { _level7Messages.Add(new MsgItem { IsUser = false, Content = $"Error: {ex.Message}" }); } _level7Loading = false; StateHasChanged(); }
 
     // Level 9: LangGraph Simulation
     private async Task ProcessLevel9() {
         if (string.IsNullOrWhiteSpace(_level9Input)) return;
-        var msg = _level9Input; _level9Input = "";
+        var msg = _level9Input; _level9LastInput = msg; _level9Input = "";
         _level9Messages.Add(new MsgItem { IsUser = true, Content = msg });
         _level9Loading = true; StateHasChanged();
         await Task.Delay(1000);
@@ -551,7 +544,7 @@ trace.LogOutput(response);
     // Level 10: Observability Simulation
     private async Task ProcessLevel10() {
         if (string.IsNullOrWhiteSpace(_level10Input)) return;
-        var msg = _level10Input; _level10Input = "";
+        var msg = _level10Input; _level10LastInput = msg; _level10Input = "";
         _level10Messages.Add(new MsgItem { IsUser = true, Content = msg });
         _level10Loading = true; StateHasChanged();
         var stopWatch = System.Diagnostics.Stopwatch.StartNew();
