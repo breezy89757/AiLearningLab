@@ -1,4 +1,6 @@
 @* ChatBox Component - 共用聊天介面 *@
+@using Markdig
+@inject IJSRuntime JS
 
 <div class="chat-box @(DualPane ? "dual-pane" : "")">
     @if (!string.IsNullOrEmpty(Title))
@@ -18,7 +20,7 @@
             <div class="chat-message @(msg.IsUser ? "user" : "assistant")">
                 <div class="message-avatar">@(msg.IsUser ? "👤" : "🤖")</div>
                 <div class="message-content">
-                    <div class="message-text">@((MarkupString)msg.Content)</div>
+                    <div class="message-text">@((MarkupString)Markdown.ToHtml(msg.Content ?? ""))</div>
                     @if (!string.IsNullOrEmpty(msg.Metadata))
                     {
                         <div class="message-metadata">@msg.Metadata</div>
@@ -75,6 +77,11 @@
         }
     }
     
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JS.InvokeVoidAsync("renderMermaid");
+    }
+
     private async Task SendMessage()
     {
         if (string.IsNullOrWhiteSpace(InputText)) return;

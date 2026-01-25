@@ -30,6 +30,7 @@ An interactive Blazor web application for teaching AI technology evolution — f
 | L8 | MCP | Standard protocol | Tool integration effort |
 | L9 | LangGraph | Graph-based flows | Uncontrollable complex tasks |
 | L10 | Observability | Monitoring & Debugging | AI behavior black box |
+| L11 | Skills | Dynamic loading | Static tooling & Recompilation |
 
 ## 🚀 Quick Start
 

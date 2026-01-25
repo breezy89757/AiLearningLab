@@ -7,7 +7,7 @@
     <base href="/" />
     <ResourcePreloader />
     <link rel="stylesheet" href="@Assets["app.css"]" />
-    <link rel="stylesheet" href="@Assets["AiLearningLab.styles.css"]" />
+    <link rel="stylesheet" href="@Assets["AiLearningLab.styles.css"]?v=@DateTime.Now.Ticks" />
     <ImportMap />
     <HeadOutlet />
 </head>
@@ -16,6 +16,84 @@
     <Routes />
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
+        
+        window.renderMermaid = async () => {
+            console.log("🌊 [Mermaid] Triggering run...");
+            
+            // 1. Identify Target Elements
+            const nodes = document.querySelectorAll('.language-mermaid');
+            if (nodes.length === 0) return;
+            
+            // 2. Prepare them for mermaid.run (it likes having a fresh container)
+            // We'll process them one by one or batch.
+            // Let's manually replace <pre> wrappers first to ensure clean state
+            const processingNodes = [];
+
+            for (const codeEl of nodes) {
+                if (codeEl.getAttribute('data-processed')) continue;
+                codeEl.setAttribute('data-processed', 'true');
+
+                const graphDef = codeEl.textContent;
+                
+                // Create a clean DIV container
+                const div = document.createElement('div');
+                div.className = 'mermaid';
+                div.style.background = 'white'; 
+                div.style.padding = '10px';
+                div.style.borderRadius = '8px';
+                div.style.textAlign = 'center';
+                div.textContent = graphDef; // mermaid.run reads textContent
+
+                // Replace parent <pre> or self
+                const pre = codeEl.parentElement;
+                if (pre && pre.tagName === 'PRE') {
+                    pre.parentElement.replaceChild(div, pre);
+                } else {
+                    codeEl.parentElement.replaceChild(div, codeEl);
+                }
+                
+                processingNodes.push(div);
+            }
+
+            if (processingNodes.length > 0) {
+               try {
+                   console.log(`🌊 [Mermaid] Running on ${processingNodes.length} nodes...`);
+                   await mermaid.run({ nodes: processingNodes });
+                   
+                   // Post-process: Add Download Buttons
+                   for (const container of processingNodes) {
+                       const svg = container.querySelector('svg');
+                       if (svg) {
+                           const btn = document.createElement('button');
+                           btn.innerText = 'Download SVG'; // Removed emoji for safety
+                           btn.className = 'mermaid-download-btn';
+                           btn.title = 'Save Diagram';
+                           btn.onclick = (e) => {
+                               e.stopPropagation();
+                               const svgData = new XMLSerializer().serializeToString(svg);
+                               const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                               const url = URL.createObjectURL(blob);
+                               const a = document.createElement('a');
+                               a.href = url;
+                               a.download = 'diagram-' + Date.now() + '.svg';
+                               document.body.appendChild(a);
+                               a.click();
+                               document.body.removeChild(a);
+                           };
+                           container.appendChild(btn);
+                       }
+                   }
+                   
+                   console.log("🌊 [Mermaid] Done.");
+               } catch (err) {
+                   console.error("❌ [Mermaid] Run failed", err);
+               }
+            }
+        }
+    </script>
 </body>
 
 </html>

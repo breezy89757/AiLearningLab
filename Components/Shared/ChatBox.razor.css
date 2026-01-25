@@ -4,8 +4,9 @@
     flex-direction: column;
     height: 100%;
     min-height: 400px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: transparent;
+    /* Changed from var(--bg-card) */
+    /* border: 1px solid var(--border-color); Removed border */
     border-radius: 12px;
     overflow: hidden;
 }
@@ -60,17 +61,86 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    max-width: 100%;
+    /* Ensure content doesn't overflow parent */
 }
 
 .message-text {
     padding: 10px 14px;
     border-radius: 12px;
     line-height: 1.5;
+    word-wrap: break-word;
+    /* Wrap long words */
+}
+
+/* Markdown Styling within message-text */
+.message-text ::deep p {
+    margin: 0 0 8px 0;
+}
+
+.message-text ::deep p:last-child {
+    margin-bottom: 0;
+}
+
+.message-text ::deep pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    margin: 8px 0;
+    border: 1px solid #333;
+}
+
+.message-text ::deep code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+}
+
+.message-text ::deep pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: 1em;
+}
+
+.message-text ::deep ul,
+.message-text ::deep ol {
+    margin: 4px 0 8px 20px;
+    padding: 0;
+}
+
+.message-text ::deep li {
+    margin-bottom: 4px;
+}
+
+.message-text ::deep blockquote {
+    border-left: 4px solid var(--accent);
+    margin: 8px 0;
+    padding: 4px 12px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-secondary);
 }
 
 .chat-message.user .message-text {
     background: var(--accent);
     color: white;
+}
+
+/* Ensure markdown elements in user message inherit white color */
+.chat-message.user .message-text ::deep code {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.chat-message.user .message-text ::deep pre {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .chat-message.assistant .message-text {

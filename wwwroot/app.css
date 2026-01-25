@@ -135,3 +135,86 @@
         transform: translateX(0);
     }
 }
+
+/* ===== Markdown Styling (Global) ===== */
+.message-text p {
+    margin: 0 0 8px 0;
+}
+
+.message-text p:last-child {
+    margin-bottom: 0;
+}
+
+.message-text pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    margin: 8px 0;
+    border: 1px solid #333;
+}
+
+.message-text code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+}
+
+.message-text pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: 1em;
+}
+
+.message-text ul,
+.message-text ol {
+    margin: 4px 0 8px 20px;
+    padding: 0;
+}
+
+.message-text li {
+    margin-bottom: 4px;
+}
+
+.message-text blockquote {
+    border-left: 4px solid var(--accent);
+    margin: 8px 0;
+    padding: 4px 12px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-secondary);
+}
+
+.chat-message.user .message-text code {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.chat-message.user .message-text pre {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Ensure Mermaid container is visible */
+.mermaid {
+    margin: 10px 0;
+    border-radius: 8px;
+    overflow-x: auto;
+    /* Allow scrolling if too wide */
+    /* Optional: minimal border to distinguish diagram from background */
+    border: 1px solid var(--border-color);
+    background: white;
+    /* Ensure visibility against dark theme if needed */
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+    background-color: white;
+    /* Triple ensure background */
+}

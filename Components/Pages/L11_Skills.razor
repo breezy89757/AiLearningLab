@@ -1,0 +1,188 @@
+@using AiLearningLab.Components.Shared
+@using AiLearningLab.Services
+@inject LlmService Llm
+@inject ILogger<L11_Skills> Logger
+@inject IStringLocalizer<SharedResource> L
+
+<section id="level11" class="level-section evolved">
+    <div class="level-header">
+        <span class="level-badge">L11</span>
+        <div class="level-title">
+            <h2>L11: Skills (Two-Stage Loading)</h2>
+            <p>Router Mode: Metadata Discovery -> Dynamic Skill Injection</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" @onclick="ClearChat">@L["Clear"]</button>
+    </div>
+
+    <details class="code-section">
+        <summary>@L["ViewCode"]</summary>
+        <pre><code>// 1. Router Logic (Lightweight)
+var routerPrompt = "Available: " + string.Join(", ", skills.Select(s => s.Name + ":" + s.Description));
+var decision = await Llm.ChatPureAsync(routerPrompt + "\nUser: " + message);
+
+// 2. Execution Logic (Heavyweight)
+if (decision.Contains("&lt;&lt;ACTIVATE: MermaidArchitect&gt;&gt;")) {
+   var fullSystemPrompt = BlazorAppGen.Body; // Only loaded now!
+   var finalResponse = await Llm.ChatWithSystemPromptAsync(message, fullSystemPrompt);
+}</code></pre>
+    </details>
+
+    <div class="level-content">
+        <!-- Available Skills List (Metadata Only) -->
+        <div class="control-panel" style="margin-bottom: 1rem; background: var(--bg-sidebar); padding: 1rem; border-radius: 8px;">
+            <label style="font-weight:bold; color:var(--text-primary); display:block; margin-bottom:0.5rem;">📁 Available Skills (Metadata Only):</label>
+            <div class="skills-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:10px;">
+                @foreach (var skill in Skills)
+                {
+                    <div class="skill-card" style="background:white; padding:10px; border-radius:6px; border:1px solid var(--border-color);">
+                        <div style="font-weight:bold; color:var(--accent);">@skill.Name</div>
+                        <div style="font-size:0.85em; color:var(--text-secondary);">@skill.Description</div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <ChatBox Title="" 
+                 Placeholder="Try: 'Draw a login flow sequence' or 'Review this csharp code'"
+                 Messages="Messages"
+                 IsLoading="IsLoading"
+                 OnSend="HandleSendMessage"
+                 OnClear="ClearChat"
+                 ShowClearButton="false" /> 
+    </div>
+</section>
+
+@code {
+    private List<ChatBox.ChatMessageItem> Messages = new();
+    private bool IsLoading = false;
+    
+    // Mock Skills Data (Separated Metadata and Body)
+    private List<SkillDefinition> Skills = new()
+    {
+        new SkillDefinition(
+            "MermaidArchitect", 
+            "將使用者描述的流程轉化為 Mermaid.js 圖表代碼。", 
+            "# Goal\nConvert user description into a valid Mermaid.js diagram.\n\n# Instructions\n1. **Analyze**: Identify the actors, actions, and sequence in the text.\n2. **Choose Type**: Decide if it's a `sequenceDiagram`, `flowchart TD`, or `classDiagram`.\n3. **Draft**: Write the code using strict Mermaid syntax.\n4. **Constraint**: Output ONLY the code block. Do not explain."
+        ),
+        new SkillDefinition(
+            "CodeReviewer", 
+            "針對程式碼進行安全性與效能審查，並輸出 JSON 報告。", 
+            "# Goal\nAnalyze code for bugs, security risks, and performance issues.\n\n# Instructions\n1. **Scan**: Look for hardcoded secrets, infinite loops, or SQL injection risks.\n2. **Categorize**: Label each issue as 'High', 'Medium', or 'Low'.\n3. **Output**: Return a JSON object with a list of issues.\n   Format: { \"score\": 85, \"issues\": [ { \"line\": 10, \"severity\": \"High\", \"message\": \"...\" } ] }"
+        )
+    };
+
+    private async Task HandleSendMessage(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message)) return;
+
+        IsLoading = true;
+        Messages.Add(new ChatBox.ChatMessageItem { IsUser = true, Content = message });
+        StateHasChanged();
+
+        try
+        {
+            // Prepare Skills Registry String
+            var skillRegistry = string.Join("\n", Skills.Select(s => $"- {s.Name}: {s.Description}"));
+
+            // Stage 1: Router
+            // We only inject Metadata (Name + Description) to save context window and mimic local index search
+            var routerPrompt = $@"You are an intelligent assistant with access to a specific set of skills.
+
+[Available Skills Registry]
+{skillRegistry}
+
+[Instructions]
+1. If the user asks what you can do, **cite the specific skills above**.
+2. If the user's request matches a skill trigger, output <<ACTIVATE: SkillName>>.
+3. Otherwise, return <<CHAT>> to handle it as a normal conversation.
+4. Do not explain your decision. Just output the token.
+
+User Request: {message}";
+
+            // Call LLM for routing
+            var routerResponse = await Llm.ChatPureAsync(routerPrompt);
+            Logger.LogInformation("Router Decision: {Decision}", routerResponse);
+
+            // Parse Router Decision
+            string? activeSkillName = null;
+            if (routerResponse.Contains("<<ACTIVATE:"))
+            {
+                var start = routerResponse.IndexOf("<<ACTIVATE:") + 11;
+                var end = routerResponse.IndexOf(">>", start);
+                if (end > start)
+                {
+                    activeSkillName = routerResponse.Substring(start, end - start).Trim();
+                }
+            }
+
+            // Stage 2: Execution
+            if (!string.IsNullOrEmpty(activeSkillName))
+            {
+                var skill = Skills.FirstOrDefault(s => s.Name.Equals(activeSkillName, StringComparison.OrdinalIgnoreCase));
+                if (skill != null)
+                {
+                    Messages.Add(new ChatBox.ChatMessageItem 
+                    { 
+                        IsUser = false, 
+                        Content = $"⚡ **Router Active**: Delegating to skill `{skill.Name}`...",
+                        Metadata = "System Router"
+                    });
+                    StateHasChanged();
+
+                    // Inject Full Body
+                    var executionPayload = $@"System: You are an expert agent executing the skill '{skill.Name}'.
+Instructions:
+{skill.Body}
+
+User Request: {message}";
+
+                    var finalResponse = await Llm.ChatPureAsync(executionPayload);
+                     Messages.Add(new ChatBox.ChatMessageItem 
+                    { 
+                        IsUser = false, 
+                        Content = finalResponse,
+                        Metadata = $"Executed by {skill.Name}" 
+                    });
+                }
+                else
+                {
+                    Messages.Add(new ChatBox.ChatMessageItem { IsUser = false, Content = routerResponse });
+                }
+            }
+            else
+            {
+                // General Chat (Router returned <<CHAT>>)
+                // We use ChatWithSystemPromptAsync to inject the skills list so the agent knows what it can do
+                var baseSystemPrompt = $@"You are an intelligent assistant with access to a specific set of skills.
+
+[Available Skills Registry]
+{skillRegistry}
+
+[Instructions]
+1. If the user asks what you can do, **cite the specific skills above**.
+2. Answer helpfuly.";
+
+                var chatResponse = await Llm.ChatWithSystemPromptAsync(message, baseSystemPrompt);
+                Messages.Add(new ChatBox.ChatMessageItem { IsUser = false, Content = chatResponse, Metadata = "General Chat" });
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error processing L11 request");
+            Messages.Add(new ChatBox.ChatMessageItem { IsUser = false, Content = $"Error: {ex.Message}" });
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private void ClearChat()
+    {
+        Messages.Clear();
+    }
+
+    public record SkillDefinition(string Name, string Description, string Body);
+}
